@@ -1,20 +1,28 @@
-<ul class="nav nav-pills">
-	<li class='<?php echo Arr::get($subnav, "login" ); ?>'><?php echo Html::anchor('users/login','Login');?></li>
-	<li class='<?php echo Arr::get($subnav, "logout" ); ?>'><?php echo Html::anchor('users/logout','Logout');?></li>
-	<li class='<?php echo Arr::get($subnav, "register" ); ?>'><?php echo Html::anchor('users/register','Register');?></li>
 
-</ul>
-<p>Login</p>
 
 <div class="container">
     <div class="row">
         <div class="form-group">
-           <?php  echo Form::open(array('action' => Uri::create('users/login'), 'method' => 'post')); ?>
-            <?php echo Form::input('email','',array()) ?>
-            <?php echo Form::input('password','',array()) ?>
-            <?php echo Form::submit('login','Login',array()) ?>
+            <h3>Login</h3>
+            <br>
+            <br>
+            <?php echo Form::open(array('action' => Uri::create('users/login'), 'method' => 'post')); ?>
+            <?php echo Form::label('email', 'Email', array()) ?>
+            <?php echo Form::input('email', '', array()) ?>
+            <br>
+            <?php echo Form::label('password', 'Password', array()) ?>
+
+            <?php echo Form::input('password', '', array()) ?>
+            <br>
+            <?php echo Form::submit('login', 'Login', array()) ?>
+            <br>
+            <br>
+            <br>    
         </div>
-        
     </div>
-    
+
 </div>
+<style>
+    .form-group{margin:0px auto;}  
+
+</style>

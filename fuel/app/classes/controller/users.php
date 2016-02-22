@@ -1,15 +1,24 @@
 <?php
 
-class Controller_Users extends Controller_Template {
+class Controller_Users extends Controller_Base {
+
+    public static $login_redirect = '';
 
     public function action_login() {
-        $data["subnav"] = array('login' => 'active');
+        $data = array();
+        if (Auth::check()) {
+            Session::set_flash('error', "You are already Logged in");
+            $this->_getDashboard();
+        }
         $auth = Auth::instance();
         $view = View::forge('users/login', $data);
         if (Input::post()) {
+            $redirect = (Input::post('redirect', false)) ? Input::post('redirect') : self::$login_redirect;
             if ($auth->login(Input::post('email'), Input::post('password'))) {
+                $this->set_user();
                 Session::set_flash('success', 'Successfully logged in! Welcome ' . $auth->get_screen_name());
-                Response::redirect('users/dashboard');
+                //Response::redirect('users/dashboard');
+                $this->_getDashboard();
             } else {
                 Session::set_flash('error', 'Username or password incorrect.');
             }
@@ -22,7 +31,7 @@ class Controller_Users extends Controller_Template {
         $auth = Auth::instance();
         $auth->logout();
         Session::set_flash('success', 'Logged out.');
-        Response::redirect('messages/');
+        Response::redirect('/');
     }
 
     public function action_register() {
@@ -31,7 +40,7 @@ class Controller_Users extends Controller_Template {
         $this->template->content = View::forge('users/register', $data);
     }
 
-    public function get_register($fieldset = null, $errors = null) {
+    public static function get_register($fieldset = null, $errors = null) {
         $data["subnav"] = array('register' => 'active');
         $auth = Auth::instance();
         $view = View::forge('users/register', $data);
@@ -49,7 +58,7 @@ class Controller_Users extends Controller_Template {
     }
 
     public function post_register() {
-       
+
         $fieldset = Model_User::populate_register_fieldset(Fieldset::forge('register'));
         $fieldset->repopulate();
         $result = Model_User::validate_registration($fieldset, Auth::instance());
@@ -60,13 +69,16 @@ class Controller_Users extends Controller_Template {
         Session::set_flash('success', 'User created.');
         Response::redirect('./');
     }
-    
-    public function action_dashboard(){
-        
-        $this->template->title = 'User DashBoard';
+
+    public function action_dashboard() {
         echo "I am Logged in";
         $this->template->content = '';
     }
-  
+
+    protected function _getDashboard() {
+        $groupid = $this->current_user->group;
+        $groupName = Config::get('simpleauth.group_link.' . $groupid . '.name');
+        Response::redirect($groupName . '/dashboard');
+    }
 
 }

@@ -47,7 +47,21 @@ public static function register(Fieldset $form)
     $form->add('submit', ' ', array('type' => 'submit', 'value' => 'Register'));
     return $form;
 }
- 
+    public static function validate($factory)
+    {
+        $val = Validation::forge($factory);
+        $val->add_field('password', 'Password', 'required|max_length[255]');
+         $val->add_callable('Utils_Validationrules');
+        $val->add('email', 'Email')
+                ->add_rule('required')
+                ->add_rule('max_length', 255)
+                ->add_rule('valid_email');
+       
+
+        $val->add_field('first_name', 'First Name', 'required|max_length[255]');
+
+        return $val;
+    }
 public static function validate_registration(Fieldset $form, $auth)
 {
     $form->field('password')->add_rule('match_value', $form->field('password2')->get_attribute('value'));

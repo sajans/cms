@@ -9,15 +9,15 @@ class Controller_Pages extends Controller_Base {
     public function action_view($type = 'home') {
 
         //var_dump($type); exit;
-        if ($type == 'news') {
-            $this->template->title = 'news';
-            $this->template->content = 'news Page';
-        } elseif ($type == 'fashion') {
-            $this->template->title = 'fashion';
-            $this->template->content = 'Fashion Page';
+        if ($type == 'person') {
+            $this->template->title = 'Person';
+            $this->template->content = 'Person Page';
+        } elseif ($type == 'festival') {
+            $this->template->title = 'Festival';
+            $this->template->content = 'Festival Page';
         } else {
             $this->template->title = 'Home';
-            $this->template->content = 'Home Page';
+            $this->template->content = View::forge("pages/home");;
         }
         $this->template->navClass ='active';
     }
