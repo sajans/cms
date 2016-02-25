@@ -12,21 +12,21 @@
  * @link       http://fuelphp.com
  */
 
-namespace Auth;
+//namespace Auth;
 
 
-class Auth_Group_Simplegroup extends \Auth_Group_Driver
+class Auth_Group_Cmsgroup extends \Auth\Auth_Group_Driver
 {
 
 	protected static $_valid_groups = array();
 
 	public static function _init()
 	{
-		static::$_valid_groups = array_keys(\Config::get('simpleauth.groups', array()));
+		static::$_valid_groups = array_keys(\Config::get('cmsauth.groups', array()));
 	}
 
 	protected $config = array(
-		'drivers' => array('acl' => array('Simpleacl'))
+		'drivers' => array('acl' => array('Cmsacl'))
 	);
 
 	public function groups()
@@ -64,7 +64,7 @@ class Auth_Group_Simplegroup extends \Auth_Group_Driver
 			$group = isset($groups[0][1]) ? $groups[0][1] : null;
 		}
 
-		return \Config::get('simpleauth.groups.'.$group.'.name', null);
+		return \Config::get('cmsauth.groups.'.$group.'.name', null);
 	}
 
 	public function get_roles($group = null)
@@ -85,7 +85,7 @@ class Auth_Group_Simplegroup extends \Auth_Group_Driver
 			return array();
 		}
 
-		$groups = \Config::get('simpleauth.groups');
+		$groups = \Config::get('cmsauth.groups');
 		return $groups[(int) $group]['roles'];
 	}
 }

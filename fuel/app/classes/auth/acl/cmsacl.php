@@ -12,17 +12,17 @@
  * @link       http://fuelphp.com
  */
 
-namespace Auth;
+//namespace Auth;
 
 
-class Auth_Acl_Simpleacl extends \Auth_Acl_Driver
+class Auth_Acl_Cmsacl extends \Auth\Auth_Acl_Driver
 {
 
 	protected static $_valid_roles = array();
 
 	public static function _init()
 	{
-		static::$_valid_roles = array_keys(\Config::get('simpleauth.roles'));
+		static::$_valid_roles = array_keys(\Config::get('cmsauth.roles'));
 	}
 
 	public function roles()
@@ -47,7 +47,7 @@ class Auth_Acl_Simpleacl extends \Auth_Acl_Driver
 		$current_rights = array();
 		if (is_array($current_roles))
 		{
-			$roles = \Config::get('simpleauth.roles', array());
+			$roles = \Config::get('cmsauth.roles', array());
 			array_key_exists('#', $roles) && array_unshift($current_roles, '#');
 			foreach ($current_roles as $r_role)
 			{
