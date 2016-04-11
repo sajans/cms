@@ -4,14 +4,19 @@
         <meta charset="utf-8">
         <title><?php echo $title; ?></title>
         <?php echo Asset::css('bootstrap.css'); ?>
+        <?php echo Asset::css('main.css'); ?>
+        <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
+        
         <style>
             body { margin: 50px; }
         </style>
         <?php
         echo Asset::js(array(
             'jquery-1.11.1.min.js',
-            'bootstrap.min.js'
+            'bootstrap.min.js',
+            'script.js'
         ));
+        echo View::forge("js/variables");
         ?>
         <script>
             $(function () {
@@ -30,16 +35,16 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">My Site</a>
+                        <a class="navbar-brand" href="<?= Uri::create("/"); ?>">My Site</a>
                     </div>
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
                             <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/dashboard', 'Dashboard') ?>
                             </li>
-                             <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
-                                <?php echo Html::anchor('admin/users/create', 'Create User') ?>
-                            </li> 
+                               <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
+                                <?php echo Html::anchor('admin/users', 'Users') ?>
+                            </li>
 
                             <?php
                             /*
@@ -97,6 +102,7 @@
             </div>
             <hr/>
             <footer>
+                <div id="notificationDiv" class="ajax-status-popup-display-js" style="display:none;"></div>
                 <p class="pull-right">Page rendered in {exec_time}s using {mem_usage}mb of memory.</p>
                 <p>
                     <a href="http://fuelphp.com">FuelPHP</a> is released under the MIT license.<br>

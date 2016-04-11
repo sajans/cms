@@ -1,0 +1,42 @@
+.ajax-status-popup-display-js{
+    display:none;
+    font-size:13px;
+    font-weight:bold;
+    margin: 0 0 6px;
+    color:white;
+    position:fixed;
+    top:40px;
+    right:20px;
+    width:300px;
+    background-color:#FF6347;
+    box-shadow: 0 0 12px #999999;	
+    z-index:999999;
+    border:1px solid #000;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    padding: 16px 34px; 
+}
+.ajax-status-popup-display-js img {
+    float:left;
+    margin-left:1px;
+    position:relative;
+    top:-9px;
+    margin-right:8px;
+}
+
+.pagination-table{
+    background-color: #BCE8F1;
+}
+tr.odd{
+    background-color:#F5F5F5; 
+}
+
+
+.action {
+    background: #BCE8F1;
+    padding: 4px;
+    border-radius: 5px;
+}
+.red{
+    background:red;
+}

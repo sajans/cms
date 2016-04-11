@@ -140,6 +140,9 @@ return array(
             ),
             'Controller_Admin_Users' => array(
                 'create',
+                'index',
+                'list',
+                'grid',
             ),
         ),
     ),
