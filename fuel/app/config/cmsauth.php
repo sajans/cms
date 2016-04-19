@@ -93,13 +93,13 @@ return array(
         '50' => array('name' => 'manager'),
         '100' => array('name' => 'admin'),
     ),
-     'group_list' => array(
-        '-1' =>  'banned',
-        '10' =>'guest',
+    'group_list' => array(
+        '-1' => 'banned',
+        '10' => 'guest',
         '20' => 'user',
-        '30' =>'writer',
-        '50' =>'manager',
-        '100' =>'admin',
+        '30' => 'writer',
+        '50' => 'manager',
+        '100' => 'admin',
     ),
     /**
      * Roles as name => array(location => rights)
@@ -129,14 +129,43 @@ return array(
                 'dashboard',
             ),
         ),
+        #Writter Part
+        'writer' => array(
+            'Controller_Admin' => array(
+                'index',
+                'dashboard',
+            ),
+            'Controller_Admin_Article' => array(
+                'create',
+                'index',
+                'list',
+                'grid',
+                'view',
+                'delete',
+            ),
+            'Controller_Admin_Category' => array(
+                'create',
+                'index',
+                'list',
+                'grid',
+                'view',
+                'edit',
+                'delete',
+            ),
+            'Controller_Admin_Date' => array(
+                'create',
+                'index',
+                'list',
+                'grid',
+                'view',
+                'delete',
+            ),
+        ),
+        #Writter Part
         #Admin Part Start
         'admin' => array(
             'Controller_Users' => array(
                 'register',
-            ),
-            'Controller_Admin' => array(
-                'index',
-                'dashboard',
             ),
             'Controller_Admin_Users' => array(
                 'create',

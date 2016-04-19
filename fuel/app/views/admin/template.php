@@ -42,8 +42,14 @@
                             <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/dashboard', 'Dashboard') ?>
                             </li>
-                               <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
+                               <li class="<?php echo Uri::segment(2) == 'users' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/users', 'Users') ?>
+                            </li>
+                               <li class="<?php echo Uri::segment(2) == 'category' ? 'active' : '' ?>">
+                                <?php echo Html::anchor('admin/category', 'Categories') ?>
+                            </li>
+                               <li class="<?php echo Uri::segment(2) == 'article' ? 'active' : '' ?>">
+                                <?php echo Html::anchor('admin/article', 'Articles') ?>
                             </li>
 
                             <?php
