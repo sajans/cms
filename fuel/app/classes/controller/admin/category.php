@@ -73,7 +73,7 @@ class Controller_Admin_Category extends Controller_Admin {
                 if ($category and $category->save()) {
                     Session::set_flash('success', 'Added category #' . $category->id . '.');
 
-                    Response::redirect('category');
+                    Response::redirect('admin/category');
                 } else {
                     Session::set_flash('error', 'Could not save category.');
                 }
@@ -124,18 +124,23 @@ class Controller_Admin_Category extends Controller_Admin {
         $this->template->content = View::forge('admin/category/create');
     }
 
-    public function action_delete($id = null) {
-        is_null($id) and Response::redirect('category');
+    public function action_delete($id = null, $save = null) {
 
-        if ($category = Model_Category::find($id)) {
-            $category->delete();
-
-            Session::set_flash('success', 'Deleted category #' . $id);
+        if ($save) {
+            if ($category = Model_Category::find($id)) {
+                $category->delete();
+                $data['status'] = "success";
+                $data['msg'] = "successfully Deleted category";
+            } else {
+                $data['status'] = "fales";
+                $data['msg'] = "Category not found";
+            }
+            $data1['response'] = json_encode($data);
+            $view = View::forge('admin/response',$data1,false);
         } else {
-            Session::set_flash('error', 'Could not delete category #' . $id);
+            $view = View::forge('admin/modal/delete',array('control'=>'category','ajaxload'=>'loadCategoryGrid','url'=>Uri::create("admin/category/delete/".$id.'/save')),false);
         }
-
-        Response::redirect('category');
+        $this->template = $view;
     }
 
 }

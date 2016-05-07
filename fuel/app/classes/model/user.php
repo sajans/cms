@@ -5,6 +5,8 @@ class Model_User extends \Orm\Model {
     protected static $_properties = array(
         'id',
         'username',
+        'first_name',
+        'last_name',
         'password',
         'password_',
         'group',
@@ -94,6 +96,18 @@ class Model_User extends \Orm\Model {
             $errors = $val->show_errors();
             return array('e_found' => true, 'errors' => $errors);
         }
+    }
+    
+        public static function getwritterList() {
+
+        $writters = self::find("all");
+        $selectList[''] = "Please Select";
+        if ($writters) {
+            foreach ($writters as $writter) {
+                $selectList[$writter->id] = $writter->first_name." ".$writter->last_name;
+            }
+        }
+        return  $selectList;
     }
 
 }

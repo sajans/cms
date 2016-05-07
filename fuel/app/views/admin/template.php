@@ -6,7 +6,7 @@
         <?php echo Asset::css('bootstrap.css'); ?>
         <?php echo Asset::css('main.css'); ?>
         <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
-        
+
         <style>
             body { margin: 50px; }
         </style>
@@ -42,29 +42,29 @@
                             <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/dashboard', 'Dashboard') ?>
                             </li>
-                               <li class="<?php echo Uri::segment(2) == 'users' ? 'active' : '' ?>">
+                            <li class="<?php echo Uri::segment(2) == 'users' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/users', 'Users') ?>
                             </li>
-                               <li class="<?php echo Uri::segment(2) == 'category' ? 'active' : '' ?>">
+                            <li class="<?php echo Uri::segment(2) == 'category' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/category', 'Categories') ?>
                             </li>
-                               <li class="<?php echo Uri::segment(2) == 'article' ? 'active' : '' ?>">
+                            <li class="<?php echo Uri::segment(2) == 'article' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/article', 'Articles') ?>
                             </li>
 
                             <?php
                             /*
-                            $files = new GlobIterator(APPPATH . 'classes/controller/admin/*.php');
-                            foreach ($files as $file) {
-                                $section_segment = $file->getBasename('.php');
-                                $section_title = Inflector::humanize($section_segment);
-                                ?>
-                                <li class="<?php echo Uri::segment(2) == $section_segment ? 'active' : '' ?>">
-                                    <?php echo Html::anchor('admin/' . $section_segment, $section_title) ?>
-                                </li>
-                                <?php
-                            }
-                            */
+                              $files = new GlobIterator(APPPATH . 'classes/controller/admin/*.php');
+                              foreach ($files as $file) {
+                              $section_segment = $file->getBasename('.php');
+                              $section_title = Inflector::humanize($section_segment);
+                              ?>
+                              <li class="<?php echo Uri::segment(2) == $section_segment ? 'active' : '' ?>">
+                              <?php echo Html::anchor('admin/' . $section_segment, $section_title) ?>
+                              </li>
+                              <?php
+                              }
+                             */
                             ?>
                         </ul>
                         <ul class="nav navbar-nav pull-right">
@@ -114,6 +114,19 @@
                     <a href="http://fuelphp.com">FuelPHP</a> is released under the MIT license.<br>
                     <small>Version: <?php echo e(Fuel::VERSION); ?></small>
                 </p>
+                <!--Bootstrap Modal Can Used to all-->
+                <div class="modal fade" id="js-cms-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content cms-modal-content">
+                          
+                        </div>
+                    </div>
+                </div>
+
+                <!--Bootstrap Modal Can Used to all-->
+
+
+
             </footer>
         </div>
     </body>

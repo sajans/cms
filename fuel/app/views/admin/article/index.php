@@ -1,40 +1,76 @@
-<h2>Listing <span class='muted'>Articles</span></h2>
-<br>
-<?php if ($articles): ?>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Category id</th>
-			<th>Name</th>
-			<th>Description</th>
-			<th>Keywords</th>
-			<th>Image</th>
-			<th>&nbsp;</th>
-		</tr>
-	</thead>
-	<tbody>
-<?php foreach ($articles as $item): ?>		<tr>
+<script type="text/javascript"src="<?= uri::create('assets/js/admin/article.js') ?>"></script>
+<style>
+    input[type='text'],select {
+        width:170px;
+        position:relative;
+        top:3px;
+    }
+</style>  
 
-			<td><?php echo $item->category_id; ?></td>
-			<td><?php echo $item->name; ?></td>
-			<td><?php echo $item->description; ?></td>
-			<td><?php echo $item->keywords; ?></td>
-			<td><?php echo $item->image; ?></td>
-			<td>
-				<div class="btn-toolbar">
-					<div class="btn-group">
-						<?php echo Html::anchor('article/view/'.$item->id, '<i class="icon-eye-open"></i> View', array('class' => 'btn btn-small')); ?>						<?php echo Html::anchor('article/edit/'.$item->id, '<i class="icon-wrench"></i> Edit', array('class' => 'btn btn-small')); ?>						<?php echo Html::anchor('article/delete/'.$item->id, '<i class="icon-trash icon-white"></i> Delete', array('class' => 'btn btn-small btn-danger', 'onclick' => "return confirm('Are you sure?')")); ?>					</div>
-				</div>
+<a href='javascript:void(0)' id="filter-trigger-js" class="moreinfo showHide"><i class="fa fa-folder-o fa-2x" title="filter"></i></a> &nbsp;
+<span class="fancyLink"><?php echo Html::anchor('admin/article/create', '<i class="fa fa-plus-square fa-2x" title="Add Article"></i> ', array('class' => 'moreinfo', 'title' => 'Add User')); ?></span> 
+<br />
+<br />
+<div id="filter-js" style="display:none" >
+    <table class="table">
+        <tr>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Name', 'name'); ?>
+                    <?php echo Form::input('name', '', array('class' => '', 'onkeyup' => 'filterArticle()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Category', 'category'); ?>
+                    <?php echo Form::select('category', '', $categories, array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Writter', 'writter'); ?>
+                    <?php echo Form::select('writter', '', $writters, array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                </div>
+            </td>
 
-			</td>
-		</tr>
-<?php endforeach; ?>	</tbody>
-</table>
+        </tr>
 
-<?php else: ?>
-<p>No Articles.</p>
 
-<?php endif; ?><p>
-	<?php echo Html::anchor('article/create', 'Add new Article', array('class' => 'btn btn-success')); ?>
+        <tr>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Status', 'status'); ?>
+                    <?php echo Form::select('status', '', array('A' => 'Active', 'R' => 'Reviewed', 'D' => 'Disabled'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Deleted', 'deleted'); ?>
+                    <?php echo Form::select('deleted', '', array('0' => 'Active', '1' => 'Deleted'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Completion', 'completion'); ?>
+                    <?php echo Form::select('completion', '', array('C' => 'Complete', 'NC' => 'Not Complete'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                </div>
+            </td>
 
-</p>
+        </tr>
+    </table>
+    <?php
+    echo Html::anchor('javascript:void(0)', '<i class="fa fa-eraser fa-2x"></i>', array('onclick' => 'resetFilters();', 'style' => "float:right", "class" => "moreinfo"));
+    ?>
+    <div class="clear"></div>
+</div>
+
+
+<div id="articleDiv" class="datagrid-container">
+    <div class="centered">
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+    </div>
+    <script>initArticleView()</script>
+</div>
+
+
+

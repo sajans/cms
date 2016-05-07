@@ -141,7 +141,9 @@ return array(
                 'list',
                 'grid',
                 'view',
+                'edit',
                 'delete',
+                'make_active',
             ),
             'Controller_Admin_Category' => array(
                 'create',

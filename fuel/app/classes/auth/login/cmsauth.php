@@ -208,16 +208,19 @@ class Auth_Login_Cmsauth extends \Auth\Auth_Login_Driver {
      * @param   Array
      * @return  bool
      */
-    public function create_user($username, $password, $email, $group = 20, Array $profile_fields = array(), $post_data) {
+    public function create_user($fullname, $password, $email, $group = 20, Array $profile_fields = array(), $post_data) {
         $password = trim($password);
         $email = filter_var(trim($email), FILTER_VALIDATE_EMAIL);
 
-        if (empty($username) or empty($password) or empty($email)) {
-            throw new \SimpleUserUpdateException('Username, password or email address is not given, or email address is invalid', 1);
+        if (empty($fullname) or empty($password) or empty($email)) {
+            throw new \SimpleUserUpdateException('fullname, password or email address is not given, or email address is invalid', 1);
         }
+        $name = explode(" ", $fullname, 2);
+        $first_name = isset($name[0]) ? $name[0] : "";
+        $last_name = isset($name[1]) ? $name[1] : "";
 
         $same_users = \DB::select_array(\Config::get('cmsauth.table_columns', array('*')))
-                ->where('username', '=', $username)
+                ->where('username', '=', $fullname)
                 ->or_where('email', '=', $email)
                 ->from(\Config::get('cmsauth.table_name'))
                 ->execute(\Config::get('cmsauth.db_connection'));
@@ -231,7 +234,9 @@ class Auth_Login_Cmsauth extends \Auth\Auth_Login_Driver {
         }
 
         $user = array(
-            'username' => (string) $username,
+            'username' => (string) $fullname,
+            'first_name' => (string) $first_name,
+            'last_name' => (string) $last_name,
             'password' => $this->hash_password((string) $password),
             'password_' => $this->hash_password((string) $password),
             'email' => $email,
@@ -241,7 +246,7 @@ class Auth_Login_Cmsauth extends \Auth\Auth_Login_Driver {
             'login_hash' => '',
             'created_at' => \Date::forge()->get_timestamp()
         );
-        $ignore = array('button', 'submit', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'county', 'town', 'group');
+        $ignore = array('button', 'submit', 'password', 'confirm_password', 'email', 'county', 'town', 'group');
         foreach ($post_data as $key => $field) {
             if (!in_array($key, $ignore)) {
                 $user[$key] = $field;

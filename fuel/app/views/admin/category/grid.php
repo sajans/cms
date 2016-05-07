@@ -29,7 +29,7 @@
                 };
                 $num++;
                 ?>>
-                
+
                     <td><?php
                         echo $category->name;
                         ?>
@@ -49,7 +49,7 @@
                         <?php /* ?>
                           <span class="fancyLink" ><?php echo Html::anchor('admin/users/delete/' . $user->id, '<span class="action red"><i class="fa fa-trash-o" title="Delete User"></i></span>'); ?></span>
                           <?php */ ?>
-                        <?php echo Html::anchor('javascript:void(0)', '<span class="action red"><i class="fa fa-trash-o"></i></span>', array('title' => 'Delete User', 'onclick' => "deleteCategory($category->id,this); return false;")); ?>
+                        <?php echo Html::anchor('admin/category/delete/'.$category->id, '<span class="action red"><i class="fa fa-trash-o"></i></span>', array('title' => 'Delete User', 'class' => 'js-cms-modal-call')); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>	

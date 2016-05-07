@@ -38,7 +38,7 @@ class Controller_Admin_Users extends Controller_Admin {
                         $fields[$feild] = $value;
                     }
                 }
-                $username = Input::post('first_name');
+                $username = Input::post('first_name')." ".Input::post('last_name');
                 $password = Input::post('password');
                 $email = Input::post('email');
                 $group = Input::post('group');
