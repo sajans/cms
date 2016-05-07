@@ -103,4 +103,16 @@ $(document).ready(function () {
      *** Delete From Modal Script For All*** 
      ***************************************/
 
+
+    /*****************
+     *** Tag Inputs*** 
+     *https://goodies.pixabay.com/jquery/tag-editor/demo.html*
+     *****************/
+    $('textarea#form_keywords').tagEditor();
+
+
+    /*****************
+     *** Tag Inputs*** 
+     *****************/
+
 });

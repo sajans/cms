@@ -5,6 +5,7 @@
         <title><?php echo $title; ?></title>
         <?php echo Asset::css('bootstrap.css'); ?>
         <?php echo Asset::css('main.css'); ?>
+        <?php echo Asset::css('tags/jquery.tag-editor.css'); ?>
         <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
 
         <style>
@@ -14,7 +15,9 @@
         echo Asset::js(array(
             'jquery-1.11.1.min.js',
             'bootstrap.min.js',
-            'script.js'
+            'tags/jquery.caret.min.js',
+            'tags/jquery.tag-editor.min.js',
+            'script.js',
         ));
         echo View::forge("js/variables");
         ?>
