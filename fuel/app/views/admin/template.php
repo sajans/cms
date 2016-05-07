@@ -5,6 +5,8 @@
         <title><?php echo $title; ?></title>
         <?php echo Asset::css('bootstrap.css'); ?>
         <?php echo Asset::css('main.css'); ?>
+        <?php echo Asset::css('jquery-ui.min.css'); ?>
+        <?php //echo Asset::css('jquery-ui.theme.min.css'); ?>
         <?php echo Asset::css('tags/jquery.tag-editor.css'); ?>
         <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
 
@@ -15,6 +17,7 @@
         echo Asset::js(array(
             'jquery-1.11.1.min.js',
             'bootstrap.min.js',
+            'jquery-ui.min.js',
             'tags/jquery.caret.min.js',
             'tags/jquery.tag-editor.min.js',
             'script.js',
@@ -53,6 +56,9 @@
                             </li>
                             <li class="<?php echo Uri::segment(2) == 'article' ? 'active' : '' ?>">
                                 <?php echo Html::anchor('admin/article', 'Articles') ?>
+                            </li>
+                              <li class="<?php echo Uri::segment(2) == 'date' ? 'active' : '' ?>">
+                                <?php echo Html::anchor('admin/date', 'Dates') ?>
                             </li>
 
                             <?php

@@ -1,138 +1,149 @@
 <?php
-class Controller_Admin_Date extends Controller_Base
-{
 
-	public function action_index()
-	{
-		$data['dates'] = Model_Date::find('all');
-		$this->template->title = "Dates";
-		$this->template->content = View::forge('admin/date/index', $data);
+class Controller_Admin_Date extends Controller_Admin {
 
-	}
+    protected $_paginationConfig = "";
 
-	public function action_view($id = null)
-	{
-		is_null($id) and Response::redirect('date');
+    public function before() {
+        //parent::before();
+        $this->_paginationConfig = array(
+            'prev_img' => Asset::img('pagination/prev.png', array("alt" => "Previous", 'class' => "prev-img")),
+            'prev_img_active' => Asset::img('pagination/prev.png', array("alt" => "Previous", 'class' => "prev-img-active")),
+            'first_img' => Asset::img('pagination/first.png', array("alt" => "first", 'class' => "first-img")),
+            'first_img_active' => Asset::img('pagination/first.png', array("alt" => "first", 'class' => "first-img-active")),
+            'next_img' => Asset::img('pagination/next.png', array("alt" => "Next", 'class' => "next-img")),
+            'next_img_active' => Asset::img('pagination/next.png', array("alt" => "Next", 'class' => "next-img-active")),
+            'last_img' => Asset::img('pagination/last.png', array("alt" => "Last", 'class' => "last-img")),
+            'last_img_active' => Asset::img('pagination/last.png', array("alt" => "Last", 'class' => "last-img-active")),
+            'css_id_prefix' => 'Dates',
+            'ajax_method' => 'loadDatesGrid',
+            'limit_default' => 30,
+            'limiter_choices' => array(30, 60, 100),
+            'limiter_prefix' => 'Dates',
+        );
 
-		if ( ! $data['date'] = Model_Date::find($id))
-		{
-			Session::set_flash('error', 'Could not find date #'.$id);
-			Response::redirect('date');
-		}
+        parent::before();
+    }
 
-		$this->template->title = "Date";
-		$this->template->content = View::forge('admin/date/view', $data);
+    public function action_index() {
+        $data = array();
+        $this->template->title = "Dates";
+        $this->template->content = View::forge('admin/date/index', $data);
+    }
 
-	}
+    public function action_grid() {
+        $name = Input::post('name');
+        if (empty($name)) {
+            $name = "%%";
+        } else {
+            $name = "%" . $name . "%";
+        }
+        $limit = (int) Input::post('limit');
+        $page = (int) Input::post('page');
+        $limit = isset($limit) ? $limit : $this->_paginationConfig['limit_default'];
+        $page = isset($page) ? $page : 1;
+        $result = DB::select(DB::expr('COUNT(id) as total'))->from('categories')
+                        ->where('name', 'like', $name)
+                        ->execute()->as_array();
+        $total = $result[0]['total'];
+        $pagination = Model_Paginator::getPaginationData($page, $limit, $total, $this->_paginationConfig);
+        $data['pagination'] = $pagination;
+        $data['categories'] = DB::select()->from('categories')
+                ->where('name', 'like', $name)
+                ->order_by("created_at", "desc")
+                ->limit($pagination->limit)
+                ->offset($pagination->offset)
+                ->as_object()
+                ->execute();
+        $this->template = View::forge('admin/category/grid', $data, false);
+    }
 
-	public function action_create()
-	{
-		if (Input::method() == 'POST')
-		{
-			$val = Model_Date::validate('create');
+    public function action_create() {
+        if (Input::method() == 'POST') {
+            $val = Model_Date::validate('create');
+            //var_dump(Input::post(),strtotime(Input::post('date')));
+            //exit;
+            if ($val->run()) {
+                $date = Model_Date::forge(array(
+                            'title' => Input::post('title'),
+                            'summary' => Input::post('summary'),
+                            'date' => strtotime(Input::post('date')),
+                            'date_keywords' => Input::post('date_keywords'),
+                ));
 
-			if ($val->run())
-			{
-				$date = Model_Date::forge(array(
-					'name' => Input::post('name'),
-					'description' => Input::post('description'),
-					'date' => Input::post('date'),
-					'keywords' => Input::post('keywords'),
-				));
+                if ($date and $date->save()) {
+                    Session::set_flash('success', 'Added date #' . $date->id . '.');
 
-				if ($date and $date->save())
-				{
-					Session::set_flash('success', 'Added date #'.$date->id.'.');
+                    Response::redirect('admin/date');
+                } else {
+                    Session::set_flash('error', 'Could not save date.');
+                }
+            } else {
+                Session::set_flash('error', $val->error());
+            }
+        }
 
-					Response::redirect('date');
-				}
+        $this->template->title = "Dates";
+        $this->template->content = View::forge('admin/date/create');
+    }
 
-				else
-				{
-					Session::set_flash('error', 'Could not save date.');
-				}
-			}
-			else
-			{
-				Session::set_flash('error', $val->error());
-			}
-		}
+    public function action_edit($id = null) {
+        is_null($id) and Response::redirect('date');
 
-		$this->template->title = "Dates";
-		$this->template->content = View::forge('admin/date/create');
+        if (!$date = Model_Date::find($id)) {
+            Session::set_flash('error', 'Could not find Date' . $id);
+            Response::redirect('date');
+        }
 
-	}
+        $val = Model_Date::validate('date');
 
-	public function action_edit($id = null)
-	{
-		is_null($id) and Response::redirect('date');
+        if ($val->run()) {
+            $date->title = Input::post('title');
+            $date->summary = Input::post('summary');
+            $date->date = strtotime(Input::post('date'));
+            $date->date_keywords = Input::post('date_keywords');
 
-		if ( ! $date = Model_Date::find($id))
-		{
-			Session::set_flash('error', 'Could not find date #'.$id);
-			Response::redirect('date');
-		}
+            if ($date->save()) {
+                Session::set_flash('success', 'Updated Dates #' . $id);
 
-		$val = Model_Date::validate('edit');
+                Response::redirect('admin/date');
+            } else {
+                Session::set_flash('error', 'Could not update date #' . $id);
+            }
+        } else {
+            if (Input::method() == 'POST') {
+                $date->title = Input::post('title');
+                $date->summary = Input::post('summary');
+                $date->date = Input::post('date');
+                $date->date_keywords = Input::post('date_keywords');
 
-		if ($val->run())
-		{
-			$date->name = Input::post('name');
-			$date->description = Input::post('description');
-			$date->date = Input::post('date');
-			$date->keywords = Input::post('keywords');
+                Session::set_flash('error', $val->error());
+            }
 
-			if ($date->save())
-			{
-				Session::set_flash('success', 'Updated date #' . $id);
+            $this->template->set_global('date', $date, false);
+        }
 
-				Response::redirect('date');
-			}
+        $this->template->title = "Dates";
+        $this->template->content = View::forge('admin/date/create');
+    }
 
-			else
-			{
-				Session::set_flash('error', 'Could not update date #' . $id);
-			}
-		}
+    public function action_delete($id = null, $save = null) {
 
-		else
-		{
-			if (Input::method() == 'POST')
-			{
-				$date->name = $val->validated('name');
-				$date->description = $val->validated('description');
-				$date->date = $val->validated('date');
-				$date->keywords = $val->validated('keywords');
-
-				Session::set_flash('error', $val->error());
-			}
-
-			$this->template->set_global('date', $date, false);
-		}
-
-		$this->template->title = "Dates";
-		$this->template->content = View::forge('admin/date/edit');
-
-	}
-
-	public function action_delete($id = null)
-	{
-		is_null($id) and Response::redirect('date');
-
-		if ($date = Model_Date::find($id))
-		{
-			$date->delete();
-
-			Session::set_flash('success', 'Deleted date #'.$id);
-		}
-
-		else
-		{
-			Session::set_flash('error', 'Could not delete date #'.$id);
-		}
-
-		Response::redirect('date');
-
-	}
+        if ($save) {
+            if ($category = Model_Date::find($id)) {
+                $category->delete();
+                $data['status'] = "success";
+                $data['msg'] = "successfully Deleted Date";
+            } else {
+                $data['status'] = "fales";
+                $data['msg'] = "Date not found";
+            }
+            $data1['response'] = json_encode($data);
+            $view = View::forge('admin/response', $data1, false);
+        } else {
+            $view = View::forge('admin/modal/delete', array('control' => 'date', 'ajaxload' => 'loadDateGrid', 'url' => Uri::create("admin/date/delete/" . $id . '/save')), false);
+        }
+        $this->template = $view;
+    }
 
 }

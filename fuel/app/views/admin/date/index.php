@@ -1,38 +1,39 @@
-<h2>Listing <span class='muted'>Dates</span></h2>
-<br>
-<?php if ($dates): ?>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Description</th>
-			<th>Date</th>
-			<th>Keywords</th>
-			<th>&nbsp;</th>
-		</tr>
-	</thead>
-	<tbody>
-<?php foreach ($dates as $item): ?>		<tr>
+<script type="text/javascript"src="<?= uri::create('assets/js/admin/date.js') ?>"></script>
+<style>
+    input[type='text'],select {
+        width:170px;
+        position:relative;
+        top:3px;
+    }
+</style>  
+<a href='javascript:void(0)' id="filter-trigger-js" class="moreinfo showHide"><i class="fa fa-folder-o fa-2x" title="filter"></i></a> &nbsp;
+<span class="fancyLink"><?php echo Html::anchor('admin/date/create', '<i class="fa fa-plus-square fa-2x" title="Add Category"></i> ', array('class' => 'moreinfo', 'title' => 'Add User')); ?></span> 
+<br />
+<br />
 
-			<td><?php echo $item->name; ?></td>
-			<td><?php echo $item->description; ?></td>
-			<td><?php echo $item->date; ?></td>
-			<td><?php echo $item->keywords; ?></td>
-			<td>
-				<div class="btn-toolbar">
-					<div class="btn-group">
-						<?php echo Html::anchor('date/view/'.$item->id, '<i class="icon-eye-open"></i> View', array('class' => 'btn btn-small')); ?>						<?php echo Html::anchor('date/edit/'.$item->id, '<i class="icon-wrench"></i> Edit', array('class' => 'btn btn-small')); ?>						<?php echo Html::anchor('date/delete/'.$item->id, '<i class="icon-trash icon-white"></i> Delete', array('class' => 'btn btn-small btn-danger', 'onclick' => "return confirm('Are you sure?')")); ?>					</div>
-				</div>
+<div id="filter-js" style="display:none" >
+    <table class="table">
+        <tr>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Name', 'name'); ?>
+                    <?php echo Form::input('name', '', array('class' => '', 'onkeyup' => 'filterDate()')); ?>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <?php
+    echo Html::anchor('javascript:void(0)', '<i class="fa fa-eraser fa-2x"></i>', array('onclick' => 'resetFilters();', 'style' => "float:right", "class" => "moreinfo"));
+    ?>
+    <div class="clear"></div>
+</div>
 
-			</td>
-		</tr>
-<?php endforeach; ?>	</tbody>
-</table>
 
-<?php else: ?>
-<p>No Dates.</p>
+<div id="dateDiv" class="datagrid-container">
+    <div class="centered">
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+    </div>
+    <script>initDateView()</script>
+</div>
 
-<?php endif; ?><p>
-	<?php echo Html::anchor('date/create', 'Add new Date', array('class' => 'btn btn-success')); ?>
 
-</p>

@@ -162,6 +162,7 @@ return array(
                 'view',
                 'delete',
             ),
+
         ),
         #Writter Part
         #Admin Part Start
