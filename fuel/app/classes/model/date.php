@@ -6,6 +6,7 @@ class Model_Date extends Model {
 
     protected static $_properties = array(
         'id',
+        'article_id',
         'title',
         'summary',
         'date',

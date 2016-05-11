@@ -11,6 +11,9 @@ return array(
         2 => '004_create_categories',
         3 => '005_create_articles',
         4 => '006_create_dates',
+        5 => '007_create_uploads',
+        6 => '008_create_upload_types',
+        7 => '009_create_upload_articles',
       ),
     ),
     'module' => 
