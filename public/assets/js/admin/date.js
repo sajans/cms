@@ -5,16 +5,18 @@ function initDateView() {
 }
 
 function loadDateGrid(page, limit) {
-    var name = $("#form_username").val();
+    var title = $("#form_title").val();
+    var sumamry = $("#form_summary").val();
+    var date = $("#search-datepicker-js").val();
     $.ajax({
         type: "POST",
         cache: false,
-        data: {name: name, page: page, limit: limit},
+        data: {title: title, sumamry: sumamry, date: date},
         url: base_url + "admin/date/grid",
         start: show_message('refreshing..'),
         dataType: "html",
         success: function (response) {
-            $("#categoryDiv").html(response);
+            $("#dateDiv").html(response);
             initDateGrid();
             hide_message(response.msg);
 

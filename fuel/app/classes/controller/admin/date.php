@@ -32,30 +32,45 @@ class Controller_Admin_Date extends Controller_Admin {
     }
 
     public function action_grid() {
-        $name = Input::post('name');
-        if (empty($name)) {
-            $name = "%%";
+        $title = Input::post('title');
+        if (empty($title)) {
+            $title = "%%";
         } else {
-            $name = "%" . $name . "%";
+            $title = "%" . $title . "%";
         }
+        $summary = Input::post('summary');
+        if (empty($summary)) {
+            $summary = "%%";
+        } else {
+            $summary = "%" . $summary . "%";
+        }
+        $date = Input::post('date');
+        if (empty($date)) {
+            $date = "%%";
+        } else {
+            $date = "%" . $date . "%";
+        }
+
         $limit = (int) Input::post('limit');
         $page = (int) Input::post('page');
         $limit = isset($limit) ? $limit : $this->_paginationConfig['limit_default'];
         $page = isset($page) ? $page : 1;
-        $result = DB::select(DB::expr('COUNT(id) as total'))->from('categories')
-                        ->where('name', 'like', $name)
+        $result = DB::select(DB::expr('COUNT(id) as total'))->from('dates')
+                        ->where('title', 'like', $title)
+                        ->where('summary', 'like', $summary)
                         ->execute()->as_array();
         $total = $result[0]['total'];
         $pagination = Model_Paginator::getPaginationData($page, $limit, $total, $this->_paginationConfig);
         $data['pagination'] = $pagination;
-        $data['categories'] = DB::select()->from('categories')
-                ->where('name', 'like', $name)
+        $data['dates'] = DB::select()->from('dates')
+                ->where('title', 'like', $title)
+                ->where('summary', 'like', $summary)
                 ->order_by("created_at", "desc")
                 ->limit($pagination->limit)
                 ->offset($pagination->offset)
                 ->as_object()
                 ->execute();
-        $this->template = View::forge('admin/category/grid', $data, false);
+        $this->template = View::forge('admin/date/grid', $data, false);
     }
 
     public function action_create() {

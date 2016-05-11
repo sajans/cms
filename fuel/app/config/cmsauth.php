@@ -160,6 +160,7 @@ return array(
                 'list',
                 'grid',
                 'view',
+                'edit',
                 'delete',
             ),
 

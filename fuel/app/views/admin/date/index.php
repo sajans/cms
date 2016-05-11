@@ -16,8 +16,20 @@
         <tr>
             <td>
                 <div class="input email">
-                    <?php echo Form::label('Name', 'name'); ?>
-                    <?php echo Form::input('name', '', array('class' => '', 'onkeyup' => 'filterDate()')); ?>
+                    <?php echo Form::label('Name', 'title'); ?>
+                    <?php echo Form::input('title', '', array('class' => '', 'onkeyup' => 'filterDate()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Summary', 'summary'); ?>
+                    <?php echo Form::input('summary', '', array('class' => '', 'onkeyup' => 'filterDate()')); ?>
+                </div>
+            </td>
+            <td>
+                <div class="input email">
+                    <?php echo Form::label('Date', 'date'); ?>
+                    <?php echo Form::input('date', '', array('class' => '','id'=>'search-datepicker-js' ,'onkeyup' => 'filterDate()')); ?>
                 </div>
             </td>
         </tr>
@@ -34,6 +46,14 @@
         <i class="fa fa-spinner fa-spin fa-3x"></i>
     </div>
     <script>initDateView()</script>
+    <script>
+        $(function () {
+            $("#search-datepicker-js").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+    </script>
 </div>
 
 
