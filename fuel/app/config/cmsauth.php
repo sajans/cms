@@ -121,6 +121,10 @@ return array(
                 'login',
                 'logout',
             ),
+             'Controller_Article' => array(
+                'index',
+                'view',
+            ),
         ),
         #User Part Start
         'user' => array(

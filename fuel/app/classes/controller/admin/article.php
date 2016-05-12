@@ -135,6 +135,7 @@ class Controller_Admin_Article extends Controller_Admin {
                             'category_id' => Input::post('category_id'),
                             'user_id' => $this->current_user->id,
                             'name' => Input::post('name'),
+                            'url_title' => str_replace(" ", "-", strtolower(Input::post('name'))),
                             'description' => Input::post('description'),
                             'keywords' => Input::post('keywords'),
                             'image' => Input::post('image'),
@@ -169,6 +170,7 @@ class Controller_Admin_Article extends Controller_Admin {
         if ($val->run()) {
             $article->category_id = Input::post('category_id');
             $article->name = Input::post('name');
+            $article->url_title = str_replace(" ", "-", strtolower(Input::post('name')));
             $article->description = Input::post('description');
             $article->keywords = Input::post('keywords');
             $article->image = Input::post('image');

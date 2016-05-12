@@ -10,6 +10,7 @@ class Model_Article extends Model {
         'user_id',
         'editor_id',
         'name',
+        'url_title',
         'description',
         'keywords',
         'image',

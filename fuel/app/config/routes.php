@@ -8,4 +8,5 @@ return array(
         'place' => 'pages/view/place', //place
         'home' => 'pages/view/home', //home
         'festival' => 'pages/view/festival', //festival
+        '(:any)' => 'article/index/$1',
 );

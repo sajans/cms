@@ -40,6 +40,16 @@ abstract class Controller_Base extends Controller_Template {
             }
         }
     }
+        public function getUri($furl)
+    {
+        $uri = explode('-', $furl);
+        $count = (int) count($uri);
+        if ($count > 1) {
+            $id = $uri[$count - 1];
+            $m = $uri[$count - 2];
+            return array($id, $m);
+        }
+    }
 
     protected function set_theme() {
 

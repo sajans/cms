@@ -6,6 +6,7 @@ class Model_Upload extends \Orm\Model
 		'id',
 		'type_id',
 		'name',
+		'original_name',
 		'path',
 		'size',
 		'created_at',
