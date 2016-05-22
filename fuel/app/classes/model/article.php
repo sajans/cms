@@ -53,6 +53,18 @@ class Model_Article extends Model {
             'cascade_delete' => true,
         ),
     );
+    protected static $_many_many = array(
+        'uploads' => array(
+            'key_from' => 'id',
+            'key_through_from' => 'article_id',
+            'table_through' => 'upload_articles',
+            'key_through_to' => 'upload_id',
+            'model_to' => 'Model_Upload',
+            'key_to' => 'id',
+            'cascade_save' => true,
+            'cascade_delete' => false,
+        ),
+    );
 
     public static function validate($factory) {
         $val = Validation::forge($factory);
@@ -65,6 +77,46 @@ class Model_Article extends Model {
         return $val;
     }
 
+    public static function validateEdit($factory) {
+        $val = Validation::forge($factory);
+        //$val->add_field('name', 'Name', 'required|max_length[255]');
+        $val->add_field('description', 'Description', 'required');
+        //$val->add_field('keywords', 'Keywords', 'required');
+        //$val->add_field('image', 'Image', 'required|max_length[255]');
+
+        return $val;
+    }
+
+    public static function getFields() {
+        $result = array();
+        $sep = " ";
+        $ignore = array('id', 'category_id', 'user_id', 'editor_id', 'name', 'keywords', 'url_title', 'status', 'deleted', 'completion', 'created_at', 'updated_at');
+        foreach (self::$_properties as $key => $property) {
+            $labelArray = array();
+            if (is_array($property)) {
+                if (!in_array($key, $ignore)) {
+                    $labelArray = explode("_", $key);
+                }
+            } else {
+                if (!in_array($property, $ignore)) {
+                    $labelArray = explode("_", $property);
+                }
+            }
+            $label = "";
+            $countlabelArray = count($labelArray);
+            if ($countlabelArray >= 1) {
+                for ($i = 0; $i < $countlabelArray; $i++) {
+                    if ($i != 0) {
+                        $label .=$sep;
+                    }
+                    $label .= ucfirst($labelArray[$i]);
+                }
+                $result[$property] = $label;
+            }
+        }
+        return $result;
+    }
+
     public function getDetail() {
 
         if ($this->detail === null) {
@@ -72,6 +124,28 @@ class Model_Article extends Model {
             $this->save();
         }
         return $this->detail;
+    }
+
+    public function getUploads($type = null, $limit = null) {
+
+        if ($type) {
+            if ($this->uploads) {
+                foreach ($this->uploads as $key => $upload) {
+                    if ($upload->type != $type) {
+                        unset($this->uploads[$key]);
+                    }
+                }
+            }
+        }
+        if ($limit) {
+            if (count($this->uploads) >= 1) {
+                $this->uploads = $this->uploads[0];
+            } else {
+                $this->uploads = null;
+            }
+        }
+
+        return $this->uploads;
     }
 
 }

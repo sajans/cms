@@ -22,6 +22,7 @@
         <?php echo Asset::css('jquery-ui.min.css'); ?>
         <?php //echo Asset::css('jquery-ui.theme.min.css'); ?>
         <?php echo Asset::css('tags/jquery.tag-editor.css'); ?>
+        <?php echo Asset::css('fileuploader/fileuploader.css'); ?>
         <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
 
         <link rel="stylesheet" href="<?= Uri::create("assets/css/style.css") ?>" />
@@ -33,6 +34,7 @@
             'jquery-ui.min.js',
             'tags/jquery.caret.min.js',
             'tags/jquery.tag-editor.min.js',
+            'fileuploader/jquery.fileuploader.min.js',
             'script.js',
         ));
         echo View::forge("js/variables");

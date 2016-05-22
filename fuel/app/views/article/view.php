@@ -1,6 +1,92 @@
+<script>
+    $(function () {
+        $('.js-profile-pic-uploader').each(function () {
+            pointer = $(this);
+            button = $(this).find('input.uploader-data');
+            var dev = $(this).find('.fileUploader');
+            data_url = button.attr('data-url');
+            button_text = button.attr('button-text');
+            multiple_val = button.attr('multiple-val');
+            object_id = button.attr('data-object-id');
+            object_type = button.attr('data-object-type');
+            var name_input = $(this).find('input.js-profile-logo');
+            var image_tool = $(this).find('.js-image-tool');
+            //var crop_url = $(this).find('.js-crop-popup');
+            var delete_url = $(this).find('.js-logo-remove');
+            uploader = new qq.FileUploader({
+                action: data_url,
+                element: dev[0],
+                uploadButtonText: button_text,
+                multiple: multiple_val,
+                sizeLimit: 10485760, // 10 MB max size
+                allowedExtensions: ['jpg', 'jpeg', 'png'],
+                template: '<div class="qq-uploader">' +
+                        '<div class="qq-upload-drop-area"><span>{dragText}</span></div>' +
+                        '<div type="hidden" class="uploader btn btn-primary btn-c-4 qq-upload-button">{uploadButtonText}</div>' +
+                        '<ul class="qq-upload-list"></ul>' +
+                        '</div>',
+                params: {
+                    object_id: object_id,
+                    object_type: object_type,
+                },
+                onComplete: function (id, fileName, responseJSON) {
+                    if (responseJSON.success) {
+                        $('.qq-upload-list').html('');
+                        $(".js-cmpy-logo-name").val(responseJSON.full_filename); // in popup
+                        $(".js-uploaded-logo-wrap").html('<img src="' + responseJSON.uri + '" id="image" class="img-circle" style="width:100%;">');
+                        //crop_url.attr('href', base_url + 'overlay/crop?pid=' + object_id + '&photo=' + responseJSON.full_filename);
+                        delete_url.attr("data-photo", responseJSON.full_filename);
+                        // Notifier.success('uploaded_successfully');
+                        image_tool.show();
+                        dev.hide();
+                    } else {
+                        // Notifier.error('allowable_formats');
+                    }
+                },
+                onProgress: function (id, fileName, loaded, total) {
+                    var percent = (loaded / total) * 100;
+                    //console.log(percent);
+                },
+                onUpload: function (id, fileName) {
+                    // Notifier.notify('uploading');
+                },
+                showMessage: function (message) {
+                    // Notifier.error(message);
+                },
+                debug: true,
+            });
+        });
+
+        function removeProfileLogo(that) {
+            var logo = $(that).attr('data-photo');
+            var user_id = $(that).attr('data-uid');
+            $.ajax({
+                type: "POST",
+                cache: false,
+                data: {logo: logo, user_id: user_id},
+                url: base_url + 'users/remove_logo',
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 'success') {
+                        $('.js-logo-remove').attr("data-photo", '');
+                        $(".js-uploaded-logo-wrap").html('<span class="img-upload-cir">Add a Logo</span>');
+                        $('.js-image-tool ').hide();
+                        $('.fileUploader').show();
+                        $('.js-profile-logo').val('');
+                        //   Notifier.success(response.msg);
+                    } else {
+                        //  Notifier.error(response.msg);
+                    }
+                }
+            });
+            return false;
+        }
+    });
+</script>
+
+
 <!-- Page Content -->
 <div class="container">
-
     <!-- Heading Row -->
     <div class="row">
         <div class="center">
@@ -13,6 +99,20 @@
     <div class="row">
         <div class="col-md-4">
             <img class="img-responsive img-rounded" src="http://placehold.it/300x300" alt="">
+
+            <?php if (isset($current_user) && $current_user->group == 100): ?>
+                <span class="js-profile-pic-uploader" <?php echo ($article->getUploads(1, 1)) ? 'style="display: none;"' : '' ?> >
+                    <input type="hidden" class="uploader-data" data-url="<?php echo Uri::create('upload/upload'); ?>" data-object-type="1" data-object-id="<?php echo $this->current_user->id; ?>" button-text= "Upload a Picture" multiple-val= "false" />
+                    <input type="hidden" name="logo" class="js-profile-logo" value="">
+                    <span class="fileUploader text-center"> </span>
+                </span>
+                <div class="js-image-tool" <?php echo ($article->getUploads(1, 1)) ? '' : 'style="display: none;"' ?>>
+                    <a class="js-logo-remove btn btn-danger" data-uid="<?php echo $article->getUploads(1, 1); ?>" data-photo="<?php echo $article->getUploads(1, 1); ?>" onclick="removeProfilePicture(this);">Delete</a>
+                </div>
+
+
+            <?php endif; ?>
+
         </div>
         <div class="col-md-4">
             <form id="detail-form">
@@ -24,60 +124,55 @@
                         <span class="input-sm">
                             Sajan Subedi
                         </span>
-                        <?php /* ?>
-                          <input type="text" name="name" disabled="disabled" value="Sajan Subedi" class="form-control input-lg">
-                          <p class="help-block"></p>
-                          <?php */ ?>
                     </div>
                 </div>
-                <?php foreach($fields as $key=>$label): ?>
-                <div class="form-group row">
-                    <div class="col-sm-5">
-                        <label><?= $label; ?></label>
-                    </div>
-                    <div class="col-sm-7">
-                        <span class="input-sm">
-                            <?= ($this->article->detail->$key)?$this->article->detail->$key:'Null';?>
-                        </span>
-                    </div>
+                <?php foreach ($fields as $key => $label): ?>
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <label><?= $label; ?></label>
+                        </div>
+                        <div class="col-sm-7">
+                            <span class="input-sm">
+                                <?= ($this->article->detail->$key) ? $this->article->detail->$key : 'Null'; ?>
+                            </span>
+                        </div>
 
-                </div>
+                    </div>
                 <?php endforeach; ?>
-             
-                <?php /* ?>
-                  <div class="text-right">
-                  <button class="btn btn-primary btn-c-2 autosave-js" data-control-area="account-settings-form" data-url="investor/profile">Save</button>
-                  </div>
-                  <?php */ ?>
 
             </form>
 
             <?php if (isset($current_user) && $current_user->group == 100): ?>
-                <a href="<?= Uri::create('article/edit_info/' . $article->id); ?>" class="js-cms-modal-call"><i class="fa fa-pencil">Edit</i></a>
+                <a href="<?= Uri::create('article/edit_info/' . $article->id); ?>" class="js-cms-modal-call"><i class="fa fa-pencil pull-right" title="Edit Info"></i></a>
             <?php endif; ?>
 
         </div>
         <div class="col-md-4">
             <table class="table">
                 <thead>
-                    <tr>
-                        <td>Born</td>
-                        <td>1989</td>
-                    </tr>
-                    <tr>
-                        <td>Awarded for national olympics champions</td>
-                        <td>1989</td>
-                    </tr>
-                    <tr>
-                        <td>marriage</td>
-                        <td>1989</td>
-                    </tr>
-                    <tr>
-                        <td>Something</td>
-                        <td>1989</td>
-                    </tr>
+                    <?php foreach ($article->dates as $dates): ?>
+                        <tr>
+                            <td><?= $dates->title; ?></td>
+                            <td>
+                                <?=
+                                date('l \, jS F \of Y', $dates->date);
+                                ?>
+                            </td>
+                            <?php if (isset($current_user) && $current_user->group == 100): ?>
+                                <td>
+                                    <a href="<?= Uri::create('article/edit_date/' . $article->id . '/' . $dates->id); ?>" class="js-cms-modal-call"><i class="fa fa-pencil pull-right" title="Edit Dates"></i></a>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach;
+                    ?>
+
                 </thead>
             </table>
+            <!--Create New Date -->
+            <?php if (isset($current_user) && $current_user->group == 100): ?>
+                <a href="<?= Uri::create('article/create_date/' . $article->id); ?>" class="js-cms-modal-call"><i class="fa fa-calendar pull-right" title="Add New Dates"></i></a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -89,18 +184,17 @@
         <div class="col-lg-12">
             <div class="well text-center">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.
+                    <?= $article->description; ?>
                 </p>
 
 
             </div>
         </div>
         <!-- /.col-lg-12 -->
+        <?php if (isset($current_user) && $current_user->group == 100): ?>
+            <a href="<?= Uri::create('article/edit_article/' . $article->id); ?>" class="js-cms-modal-call"><i class="fa fa-pencil pull-right" title="Edit Info"></i></a>
+        <?php endif; ?>
+
     </div>
     <!-- /.row -->
 
@@ -145,3 +239,5 @@
         margin: 0px 14px 5px 0px;
     }
 </style>
+
+

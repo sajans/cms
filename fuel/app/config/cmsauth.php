@@ -169,6 +169,7 @@ return array(
             'Controller_Article' => array(
                 'edit_info',
                 'edit_date',
+                'create_date',
                 'edit_picture',
                 'edit_article',
             ),

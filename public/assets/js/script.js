@@ -109,6 +109,7 @@ $(document).ready(function () {
      *https://goodies.pixabay.com/jquery/tag-editor/demo.html*
      *****************/
     $('textarea#form_keywords').tagEditor();
+    
 
 
     /*****************

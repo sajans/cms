@@ -37,11 +37,40 @@ class Model_Date extends Model {
         $val = Validation::forge($factory);
         $val->add_field('title', 'Title', 'required|max_length[255]');
         $val->add_field('summary', 'Summary', 'required');
-        //$val->add_field('date', 'Date', 'required|valid_string[numeric]');
         $val->add_field('date', 'Date', 'required');
-        //$val->add_field('date_keywords', 'Date Keywords', 'required');
+        $val->add_field('date_keywords', 'Date Keywords', 'required');
 
         return $val;
+    }
+    
+        public static function validateEdit($factory) {
+        $val = Validation::forge($factory);
+        $val->add_field('title', 'Title', 'required|max_length[255]');
+       // $val->add_field('summary', 'Summary', 'required');
+        $val->add_field('date', 'Date', 'required');
+       // $val->add_field('date_keywords', 'Date Keywords', 'required');
+
+        return $val;
+    }
+
+    public static function getFields() {
+        $result = array();
+        $sep = " ";
+        $ignore = array('id', 'article_id', 'created_at', 'updated_at');
+        foreach (self::$_properties as $property) {
+            if (!in_array($property, $ignore)) {
+                $labelArray = explode("_", $property);
+                $label = "";
+                for ($i = 0; $i < count($labelArray); $i++) {
+                    if ($i != 0) {
+                        $label .=$sep;
+                    }
+                    $label .= ucfirst($labelArray[$i]);
+                }
+                $result[$property] = $label;
+            }
+        }
+        return $result;
     }
 
 }
