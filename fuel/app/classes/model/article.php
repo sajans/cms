@@ -13,7 +13,6 @@ class Model_Article extends Model {
         'url_title',
         'description',
         'keywords',
-        'image',
         'status' => array(
             'default' => 'A',
         ),
@@ -36,6 +35,24 @@ class Model_Article extends Model {
             'mysql_timestamp' => false,
         ),
     );
+    protected static $_has_one = array(
+        'detail' => array(
+            'key_from' => 'id',
+            'model_to' => 'Model_Article_Detail',
+            'key_to' => 'article_id',
+            'cascade_save' => true,
+            'cascade_delete' => true,
+        ),
+    );
+    protected static $_has_many = array(
+        'dates' => array(
+            'key_from' => 'id',
+            'model_to' => 'Model_Date',
+            'key_to' => 'article_id',
+            'cascade_save' => true,
+            'cascade_delete' => true,
+        ),
+    );
 
     public static function validate($factory) {
         $val = Validation::forge($factory);
@@ -46,6 +63,15 @@ class Model_Article extends Model {
         //$val->add_field('image', 'Image', 'required|max_length[255]');
 
         return $val;
+    }
+
+    public function getDetail() {
+
+        if ($this->detail === null) {
+            $this->detail = new Model_Article_Detail();
+            $this->save();
+        }
+        return $this->detail;
     }
 
 }

@@ -14,6 +14,7 @@ return array(
         5 => '007_create_uploads',
         6 => '008_create_upload_types',
         7 => '009_create_upload_articles',
+        8 => '010_create_article_details',
       ),
     ),
     'module' => 

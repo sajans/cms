@@ -49,16 +49,26 @@ foreach ($links as $i => $link) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="logo-mobile" href="#"><img class="img-responsive centered" src="img/logo.png" /></a>
+                <?php /* ?>
+                  <a class="logo-mobile" href="#"><img class="img-responsive centered" src="img/logo.png" /></a>
+                  <?php */ ?>
             </div>
             <div class="col-md-2">
-                <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" />
+                <a class="logo-desktop" href="#">
+                <h3>
+                    <strong>Artricle</strong><small>Saga</small>
+                </h3>
+                    </a>
+                <?php /* ?>
+                  <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" />
+                  <?php */ ?>
+
             </div>
             <div class="login col-md-10">
-<?php /* ?>
-  <a href="javascript:void(0)" class="pull-right">Hi Steve <span class="caret"></span></a>
-  <a href="javascript:void(0)" class="pull-right hidden-xs">Jukebox <span class="caret"></span></a>
-  <?php */ ?>
+                <?php /* ?>
+                  <a href="javascript:void(0)" class="pull-right">Hi Steve <span class="caret"></span></a>
+                  <a href="javascript:void(0)" class="pull-right hidden-xs">Jukebox <span class="caret"></span></a>
+                  <?php */ ?>
                 <div class="clearfix"></div>
             </div>
 
@@ -67,38 +77,38 @@ foreach ($links as $i => $link) {
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-10">
-                      <?php  echo Utils_Html::ul($top_links); ?>
+                        <?php echo Utils_Html::ul($top_links); ?>
                         <?php /* ?>
-                        <ul class="nav navbar-nav pull-right">
-                            <li>
-                                <a href="#">Home</a>
-                            </li>
-                            <li class="active">
-                                <a href="javascript:void(0)">News</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Community</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Tours</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Media</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Discography</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Bio</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Help</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">Store</a>
-                            </li>
-                        </ul>
-                        <?php */ ?>
+                          <ul class="nav navbar-nav pull-right">
+                          <li>
+                          <a href="#">Home</a>
+                          </li>
+                          <li class="active">
+                          <a href="javascript:void(0)">News</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Community</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Tours</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Media</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Discography</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Bio</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Help</a>
+                          </li>
+                          <li>
+                          <a href="javascript:void(0)">Store</a>
+                          </li>
+                          </ul>
+                          <?php */ ?>
                     </div>
                 </div>
 

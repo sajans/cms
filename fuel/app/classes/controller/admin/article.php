@@ -142,6 +142,7 @@ class Controller_Admin_Article extends Controller_Admin {
                 ));
 
                 if ($article and $article->save()) {
+                    $article->getDetail();
                     Session::set_flash('success', 'Added article #' . $article->id . '.');
 
                     Response::redirect('admin/article');

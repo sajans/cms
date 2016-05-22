@@ -30,61 +30,20 @@
                           <?php */ ?>
                     </div>
                 </div>
+                <?php foreach($fields as $key=>$label): ?>
                 <div class="form-group row">
                     <div class="col-sm-5">
-                        <label>Mother Tounge</label>
+                        <label><?= $label; ?></label>
                     </div>
                     <div class="col-sm-7">
                         <span class="input-sm">
-                            Nepali
+                            <?= ($this->article->detail->$key)?$this->article->detail->$key:'Null';?>
                         </span>
                     </div>
 
                 </div>
-                <div class="form-group row">
-                    <div class="col-sm-5">
-                        <label>Eye Colour</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <span class="input-sm" >
-                            Black
-                        </span>
-                    </div>
-
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-5">
-                        <label>Country</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <span class="input-sm" >
-                            Nepal
-                        </span>
-                    </div>
-
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-5">
-                        <label>Spouse</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <span class="input-sm" >
-                            Nepal
-                        </span>
-                    </div>
-
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-5">
-                        <label>Childreen</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <span class="input-sm" >
-                            2
-                        </span>
-                    </div>
-
-                </div>
+                <?php endforeach; ?>
+             
                 <?php /* ?>
                   <div class="text-right">
                   <button class="btn btn-primary btn-c-2 autosave-js" data-control-area="account-settings-form" data-url="investor/profile">Save</button>
@@ -93,7 +52,9 @@
 
             </form>
 
-
+            <?php if (isset($current_user) && $current_user->group == 100): ?>
+                <a href="<?= Uri::create('article/edit_info/' . $article->id); ?>" class="js-cms-modal-call"><i class="fa fa-pencil">Edit</i></a>
+            <?php endif; ?>
 
         </div>
         <div class="col-md-4">

@@ -16,19 +16,39 @@
         <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="stylesheet" href="<?= Uri::create("assets/css/bootstrap.min.css") ?>" />
+        <!-- CSS -->
+        <?php echo Asset::css('bootstrap.css'); ?>
+        <?php echo Asset::css('main.css'); ?>
+        <?php echo Asset::css('jquery-ui.min.css'); ?>
+        <?php //echo Asset::css('jquery-ui.theme.min.css'); ?>
+        <?php echo Asset::css('tags/jquery.tag-editor.css'); ?>
+        <link type="text/css" rel="stylesheet" href="<?= Uri::Create('assets/font-awesome/css/font-awesome.min.css'); ?>" />
+
         <link rel="stylesheet" href="<?= Uri::create("assets/css/style.css") ?>" />
+        <!--JS -->
+        <?php
+        echo Asset::js(array(
+            'jquery-1.11.1.min.js',
+            'bootstrap.min.js',
+            'jquery-ui.min.js',
+            'tags/jquery.caret.min.js',
+            'tags/jquery.tag-editor.min.js',
+            'script.js',
+        ));
+        echo View::forge("js/variables");
+        ?>
+
     </head>
 
     <body>
         <!-- Navigation-->
-        <?php if(isset($navigation)){ ?>
-        <?= View::forge("templates/sections/navigation", $navigation); ?>
-        <?php  } ?>
+        <?php if (isset($navigation)) { ?>
+            <?= View::forge("templates/sections/navigation", $navigation); ?>
+        <?php } ?>
         <!-- Navigation-->
         <div id="cms-page">
             <div class="alert-section">
-                   <?php if (Session::get_flash('success')): ?>
+                <?php if (Session::get_flash('success')): ?>
                     <div class="alert alert-success">
                         <strong>Success</strong>
                         <p>
@@ -45,13 +65,11 @@
                     </div>
                 <?php endif; ?>
             </div>
-          <!--Content -->
-          <?= $content; ?>
-          <!--Content -->
+            <!--Content -->
+            <?= $content; ?>
+            <!--Content -->
         </div>
         <!--Footer -->
-        <?= View::forge("templates/sections/footer") ;?>
-        <script src="<?= Uri::create("assets/js/jquery-1.11.1.min.js"); ?>"></script>
-        <script src="<?= Uri::create("assets/js/bootstrap.min.js"); ?>"></script>
+        <?= View::forge("templates/sections/footer"); ?>
     </body>
 </html>

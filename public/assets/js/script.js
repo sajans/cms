@@ -115,4 +115,67 @@ $(document).ready(function () {
      *** Tag Inputs*** 
      *****************/
 
+    /*******************************************
+     *** Auto save from modal with validation*** 
+     *******************************************/
+
+    $(document).on('click', '.autosave-js', function (e) {
+        e.preventDefault();
+        var control_area = $(this).data("control-area");
+        var form = $("#" + control_area);
+        var url = form.attr('action');
+        var dataArray = form.serializeArray();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: dataArray,
+            dataType: 'json',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    show_message(response.msg);
+                    hide_message(response.msg);
+                    $('#js-cms-modal').modal('toggle');
+                    if (response.refresh == 'true') {
+                        location.reload();
+                    }
+                } else {
+                    if (response.validation == 'true') {
+                        var check = response.validation_fields;
+                        for (var k in response)
+                        {
+                            if (check.indexOf(k, 1)) {
+                                if (response[k]) {
+                                    $("#form_" + k).parent().removeClass("has-success");
+                                    $("#form_" + k).parent().addClass("has-error");
+                                    $("#form_" + k).parent().find('.help-block').html(response[k]);
+                                } else {
+                                    $("#form_" + k).parent().removeClass("has-error");
+                                    $("#form_" + k).parent().addClass("has-success");
+                                    $("#form_" + k).parent().find('.help-block').html("");
+
+                                }
+
+                            }
+                        }
+
+                    } else {
+
+                    }
+                }
+
+            },
+            error: function () {
+            }
+        })
+
+    });
+
+    /********************************************
+     *** Auto save from modal with validation*** 
+     *******************************************/
+
+
+
 });

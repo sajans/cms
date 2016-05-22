@@ -121,8 +121,7 @@ return array(
                 'login',
                 'logout',
             ),
-             'Controller_Article' => array(
-                'index',
+            'Controller_Article' => array(
                 'view',
             ),
         ),
@@ -167,7 +166,12 @@ return array(
                 'edit',
                 'delete',
             ),
-
+            'Controller_Article' => array(
+                'edit_info',
+                'edit_date',
+                'edit_picture',
+                'edit_article',
+            ),
         ),
         #Writter Part
         #Admin Part Start

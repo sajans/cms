@@ -50,8 +50,8 @@ class Controller_Welcome extends Controller_Base {
      * @return  Response
      */
     public function action_404() {
-        $uri = \Input::uri();
-        $uri = html_entity_decode($uri, null, 'UTF-8');
+        //$uri = \Input::uri();
+        //$uri = html_entity_decode($uri, null, 'UTF-8');
         return Response::forge(Presenter::forge('welcome/404'), 404);
     }
 

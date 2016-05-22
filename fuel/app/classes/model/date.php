@@ -24,6 +24,14 @@ class Model_Date extends Model {
             'mysql_timestamp' => false,
         ),
     );
+    protected static $_belongs_to = array(
+        'article' => array(
+            'key_from' => 'article_id',
+            'model_to' => 'Model_Article',
+            'key_to' => 'id',
+            'cascade_save' => true,
+        ),
+    );
 
     public static function validate($factory) {
         $val = Validation::forge($factory);
