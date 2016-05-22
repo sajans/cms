@@ -35,6 +35,7 @@
             'tags/jquery.caret.min.js',
             'tags/jquery.tag-editor.min.js',
             'fileuploader/jquery.fileuploader.min.js',
+            'notifier/notifier.js',
             'script.js',
         ));
         echo View::forge("js/variables");

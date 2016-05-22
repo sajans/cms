@@ -36,37 +36,84 @@ class Model_Upload extends \Orm\Model {
             'cascade_delete' => false,
         ),
     );
+   static function get_mime_type($file)
+    {
 
-    public function uploadProfileLogo() {
+        // our list of mime types
+        $mime_types = array(
+            "pdf" => "application/pdf"
+            , "exe" => "application/octet-stream"
+            , "zip" => "application/zip"
+            // ,"docx"=>"application/msword"
+            , "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            , "doc" => "application/msword"
+            , "rtf" => "text/rtf"
+            , "txt" => "text/plain"
+            , "xls" => "application/vnd.ms-excel"
+            , "ppt" => "application/vnd.ms-powerpoint"
+            , "pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            , "gif" => "image/gif"
+            , "png" => "image/png"
+            , "jpeg" => "image/jpg"
+            , "jpg" => "image/jpg"
+            , "mp3" => "audio/mpeg"
+            , "wav" => "audio/x-wav"
+            , "mpeg" => "video/mpeg"
+            , "mpg" => "video/mpeg"
+            , "mpe" => "video/mpeg"
+            , "mov" => "video/quicktime"
+            , "avi" => "video/x-msvideo"
+            , "3gp" => "video/3gpp"
+            , "css" => "text/css"
+            , "jsc" => "application/javascript"
+            , "js" => "application/javascript"
+            , "php" => "text/html"
+            , "htm" => "text/html"
+            , "html" => "text/html"
+            , "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            , "xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+            , "potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+            , "ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+            , "pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            , "sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+            , "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            , "dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+            , "xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+            , "xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+        );
+        $extention = explode('.', $file);
+        $extension = end($extention);
+        $extension = strtolower($extension);
+        return $mime_types[$extension];
+    }
+
+    public static function uploadPicture() {
         $user_id = Input::get('object_id');
         $type = Input::get('object_type');
+        $user_id = Input::get('user_id');
         $uploader = new Utils_Uploader(array('jpeg', 'jpg', 'png'));
-        $path = DOCROOT . 'assets/uploads/users/' . $this->id . DS;
+        $path = DOCROOT . 'assets/uploads' . DS;
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
-        $pic_name = 'profile_logo_' . time();
+        $typeName = Model_Upload_Type::find($type)->types;
+        $pic_name = $typeName ."_". time();
         $original = $path . $pic_name;
         $output = $uploader->handleUploadRename($path, $pic_name);
         if (isset($output['success'])) {
-            $this->profile_pic = $output['full_filename'];
-            $this->save();
-
-            $uploadAll = Model_Uploadall::forge();
-            $uploadAll->user_id = $this->id;
-            $uploadAll->type = $type;
-            $uploadAll->name = $output['full_filename'];
-            $uploadAll->save();
-
             $original = $path . $output['full_filename'];
-            Image::load($original)->preset('defaultlogo')->save($original);
-            if (\Config::get('live')) {
-                $localFileName = $path . $output['full_filename'];
-                $remoteFileName = DOCROOT . 'assets/uploads/users/' . $this->id . DS . $output['full_filename'];
-                Model_Rackspace::uploadObject($localFileName, $remoteFileName);
-                File::delete(DOCROOT . 'assets/uploads/users/' . $user_id . DS . $output['full_filename']);
-            }
-            $output['uri'] = Uri::create('users/get_logo/' . $output['full_filename'] . '/' . $user_id);
+            $uploadAll = Model_Upload::forge();
+            $uploadAll->user_id = $user_id;
+            $uploadAll->type_id = $type;
+            $uploadAll->name = $output['full_filename'];
+            $uploadAll->original_name = $output['full_filename'];
+            $uploadAll->path = $original;
+            $uploadAll->save();
+            $output['upload_id'] = $uploadAll->id;
+            Image::load($original)->preset($typeName)->save($original);
+            $localFileName = $path . $output['full_filename'];
+            $remoteFileName = DOCROOT . 'assets/uploads/' . DS . $output['full_filename'];
+            $output['uri'] = Uri::create('uplode/get_image/' . $output['full_filename'] . '/' . $output['upload_id']);
         }
         return $output;
     }

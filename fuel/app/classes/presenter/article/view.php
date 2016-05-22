@@ -17,6 +17,7 @@ class Presenter_Article_View extends Presenter {
     public function view() {
         $this->article = $this->article;
         $this->fields= Model_Article_Detail::getFields();
+        $this->uploads= $this->article->getUploads(7, 1);
   
     }
 

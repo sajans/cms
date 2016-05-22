@@ -9,6 +9,7 @@
             multiple_val = button.attr('multiple-val');
             object_id = button.attr('data-object-id');
             object_type = button.attr('data-object-type');
+            user_id = button.attr('data-user-id');
             var name_input = $(this).find('input.js-profile-logo');
             var image_tool = $(this).find('.js-image-tool');
             //var crop_url = $(this).find('.js-crop-popup');
@@ -28,12 +29,13 @@
                 params: {
                     object_id: object_id,
                     object_type: object_type,
+                    user_id: user_id,
                 },
                 onComplete: function (id, fileName, responseJSON) {
                     if (responseJSON.success) {
                         $('.qq-upload-list').html('');
                         $(".js-cmpy-logo-name").val(responseJSON.full_filename); // in popup
-                        $(".js-uploaded-logo-wrap").html('<img src="' + responseJSON.uri + '" id="image" class="img-circle" style="width:100%;">');
+                        $(".js-uploaded-logo-wrap").html('<img src="' + responseJSON.uri + '" id="image" class="img-responsive" style="width:100%;">');
                         //crop_url.attr('href', base_url + 'overlay/crop?pid=' + object_id + '&photo=' + responseJSON.full_filename);
                         delete_url.attr("data-photo", responseJSON.full_filename);
                         // Notifier.success('uploaded_successfully');
@@ -98,16 +100,17 @@
     <br>
     <div class="row">
         <div class="col-md-4">
-            <img class="img-responsive img-rounded" src="http://placehold.it/300x300" alt="">
-
+            <div class="js-uploaded-logo-wrap">
+                <img class="img-responsive img-rounded" src="<?= isset($uploads)?Uri::create("upload/get_image/".$uploads->name."/".$uploads->id):''?>" alt="">
+            </div>
             <?php if (isset($current_user) && $current_user->group == 100): ?>
-                <span class="js-profile-pic-uploader" <?php echo ($article->getUploads(1, 1)) ? 'style="display: none;"' : '' ?> >
-                    <input type="hidden" class="uploader-data" data-url="<?php echo Uri::create('upload/upload'); ?>" data-object-type="1" data-object-id="<?php echo $this->current_user->id; ?>" button-text= "Upload a Picture" multiple-val= "false" />
+                <span class="js-profile-pic-uploader" <?php echo ($uploads) ? 'style="display: none;"' : '' ?> >
+                    <input type="hidden" class="uploader-data" data-url="<?php echo Uri::create('article/upload_pic'); ?>" data-user-id="<?= $current_user->id; ?>" data-object-type="7" data-object-id="<?php echo $article->id; ?>" button-text= "Upload a Picture" multiple-val= "false" />
                     <input type="hidden" name="logo" class="js-profile-logo" value="">
                     <span class="fileUploader text-center"> </span>
                 </span>
-                <div class="js-image-tool" <?php echo ($article->getUploads(1, 1)) ? '' : 'style="display: none;"' ?>>
-                    <a class="js-logo-remove btn btn-danger" data-uid="<?php echo $article->getUploads(1, 1); ?>" data-photo="<?php echo $article->getUploads(1, 1); ?>" onclick="removeProfilePicture(this);">Delete</a>
+                <div class="js-image-tool" <?php echo ($uploads) ? '' : 'style="display: none;"' ?>>
+                    <a class="js-logo-remove btn btn-danger" data-uid="<?php echo isset($uploads)?$uploads->id:''; ?>" data-photo="<?php echo isset($uploads)?$uploads->id:''; ?>" onclick="removeProfilePicture(this);">Delete</a>
                 </div>
 
 

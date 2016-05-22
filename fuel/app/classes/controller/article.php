@@ -212,4 +212,41 @@ class Controller_Article extends Controller_Base {
         $this->template = $view;
     }
 
+    public function action_upload_pic() {
+        $article = Model_Article::find(Input::get('object_id'));
+        $output = Model_Upload::uploadPicture();
+        $upload = Model_Upload::find($output['upload_id']);
+        $article->uploads[] = $upload;
+        $article->save();
+        $data['response'] = json_encode($output);
+        return Response::forge(View::forge('response', $data, false));
+    }
+
+    public function action_remove_pic() {
+        $img_name = Input::post('logo');
+        $uid = Input::post('user_id');
+        if ($uid) {
+            if ($img_name) {
+                $model = new Model_User();
+                $output = $model->removeProfileLogo($img_name, $uid);
+            }
+            $user = Model_User::find($uid);
+            if ($user) {
+                $user->profile_pic = NULL;
+                $user->save();
+                $xx["msg"] = "photo_deleted_successfully";
+                $xx["status"] = "success";
+            } else {
+                $xx["msg"] = "Delete Fail";
+                $xx["status"] = "fail";
+            }
+            $data['response'] = json_encode($xx);
+        } else {
+            $xx["msg"] = "photo_deleted_successfully";
+            $xx["status"] = "success";
+            $data['response'] = json_encode($xx);
+        }
+        return Response::forge(View::forge('response', $data, false));
+    }
+
 }

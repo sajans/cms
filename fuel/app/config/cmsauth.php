@@ -124,6 +124,9 @@ return array(
             'Controller_Article' => array(
                 'view',
             ),
+             'Controller_Upload' => array(
+                'get_image',
+            ),
         ),
         #User Part Start
         'user' => array(
@@ -172,6 +175,8 @@ return array(
                 'create_date',
                 'edit_picture',
                 'edit_article',
+                'upload_pic',
+                'remove_pic',
             ),
         ),
         #Writter Part

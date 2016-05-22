@@ -129,9 +129,10 @@ class Model_Article extends Model {
     public function getUploads($type = null, $limit = null) {
 
         if ($type) {
-            if ($this->uploads) {
+            if (count($this->uploads) >= 1) {
                 foreach ($this->uploads as $key => $upload) {
-                    if ($upload->type != $type) {
+                    $k = $key;
+                    if ($upload->type_id != $type) {
                         unset($this->uploads[$key]);
                     }
                 }
@@ -139,13 +140,13 @@ class Model_Article extends Model {
         }
         if ($limit) {
             if (count($this->uploads) >= 1) {
-                $this->uploads = $this->uploads[0];
+                $uploads = $this->uploads[$k];
             } else {
-                $this->uploads = null;
+                $uploads = null;
             }
         }
-
-        return $this->uploads;
+       //echo "<pre>"; var_dump($uploads); exit;
+        return $uploads;
     }
 
 }
