@@ -6,8 +6,6 @@ class Model_Upload extends \Orm\Model {
         'id',
         'user_id',
         'type_id',
-        'join_id',
-        'join_type',
         'name',
         'original_name',
         'path',
@@ -26,31 +24,17 @@ class Model_Upload extends \Orm\Model {
         ),
     );
     protected static $_table_name = 'uploads';
-    protected static $_belongs_to = array(
+    protected static $_many_many = array(
         'articles' => array(
-            'key_from' => 'join_id',
+            'key_from' => 'id',
+            'key_through_from' => ' upload_id',
+            'table_through' => 'upload_articles',
+            'key_through_to' => 'article_id',
             'model_to' => 'Model_Article',
             'key_to' => 'id',
             'cascade_save' => true,
             'cascade_delete' => false,
-            'conditions' => array(
-                'where' => array(
-                    array('join_type', '=', Model_Article::JOINTYPE_UPLOAD),
-                ),
-            ),
         ),
-            /*
-              'articles' => array(
-              'key_from' => 'id',
-              'key_through_from' => ' upload_id',
-              'table_through' => 'upload_articles',
-              'key_through_to' => 'article_id',
-              'model_to' => 'Model_Article',
-              'key_to' => 'id',
-              'cascade_save' => true,
-              'cascade_delete' => false,
-              ),
-             */
     );
 
     static function get_mime_type($file) {
@@ -103,6 +87,51 @@ class Model_Upload extends \Orm\Model {
         return $mime_types[$extension];
     }
 
+    public static function uploadPicture() {
+        $user_id = Input::get('object_id');
+        $type = Input::get('object_type');
+        $user_id = Input::get('user_id');
+        $uploader = new Utils_Uploader(array('jpeg', 'jpg', 'png'));
+        $path = DOCROOT . 'assets/uploads' . DS;
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $typeName = Model_Upload_Type::find($type)->types;
+        $pic_name = $typeName . "_" . time();
+        $original = $path . $pic_name;
+        $output = $uploader->handleUploadRename($path, $pic_name);
+        if (isset($output['success'])) {
+            $original = $path . $output['full_filename'];
+            $uploadAll = Model_Upload::forge();
+            $uploadAll->user_id = $user_id;
+            $uploadAll->type_id = $type;
+            $uploadAll->name = $output['full_filename'];
+            $uploadAll->original_name = $output['full_filename'];
+            $uploadAll->path = $original;
+            $uploadAll->save();
+            $output['upload_id'] = $uploadAll->id;
+            Image::load($original)->preset($typeName)->save($original);
+            $localFileName = $path . $output['full_filename'];
+            $remoteFileName = DOCROOT . 'assets/uploads/' . DS . $output['full_filename'];
+            $output['uri'] = Uri::create('upload/get_image/' . $output['full_filename'] . '/' . $output['upload_id']);
+        }
+        return $output;
+    }
+
+    /*
+      public function removeProfileLogo($img_name, $upload_id, $type_id) {
+      $uploadType = Model_Upload_Type::find($type_id);
+      $uploadModel = self::find($upload_id);
+      if ($uploadType->thumbnail == 1) {
+      $thumbnail_path = self::_THUMBNAIL_PATH;
+      File::delete($thumbnail_path . $uploadModel->path);
+      }
+      File::delete($uploadModel->path);
+      $uploadModel->delete();
+      }
+
+     */
+
     public function removeFiles() {
         $uploadType = Model_Upload_Type::find($this->type_id);
         if ($uploadType->thumbnail == 1) {
@@ -114,7 +143,7 @@ class Model_Upload extends \Orm\Model {
         if (file_exists($this->path)) {
             File::delete($this->path);
         }
-        DB::query("DELETE FROM `uploads` WHERE id='" . $this->id . "'")->execute();
+        DB::query("DELETE FROM `uploads` WHERE id='".$this->id."'")->execute();
     }
 
 }

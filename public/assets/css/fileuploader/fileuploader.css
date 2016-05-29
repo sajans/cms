@@ -74,7 +74,7 @@ dmargin-top:-18px; /*recently added 29-9*/
 }
 .qq-upload-spinner {
 	display: inline-block;
-	background: url("../img/loading.gif");
+	//background: url("../img/loading.gif");
 	width: 15px;
 	height: 15px;
 	vertical-align: text-bottom;

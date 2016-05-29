@@ -14,6 +14,7 @@
             body { margin: 50px; }
         </style>
         <?php
+        echo View::forge("js/variables");
         echo Asset::js(array(
             'jquery-1.11.1.min.js',
             'bootstrap.min.js',
@@ -22,7 +23,7 @@
             'tags/jquery.tag-editor.min.js',
             'script.js',
         ));
-        echo View::forge("js/variables");
+      
         ?>
         <script>
             $(function () {

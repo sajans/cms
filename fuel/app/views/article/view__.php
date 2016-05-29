@@ -1,19 +1,19 @@
 <script>
     $(document).ready(function () {
-        $('.js-upload-block').each(function () {
-            pointer = $('.js-profile-pic-uploader');
-            button = pointer.find('input.uploader-data');
-            //var dev = pointer.find('.fileUploader');
-            var dev = pointer;
+        $('.js-profile-pic-uploader').each(function () {
+            pointer = $(this);
+            button = $(this).find('input.uploader-data');
+            var dev = $(this).find('.fileUploader');
             data_url = button.attr('data-url');
             button_text = button.attr('button-text');
             multiple_val = button.attr('multiple-val');
             object_id = button.attr('data-object-id');
             object_type = button.attr('data-object-type');
             user_id = button.attr('data-user-id');
+            var name_input = $(this).find('input.js-upload-name');
             var image_tool = $(this).find('.js-image-tool');
-            var delete_url = image_tool.find('.js-logo-remove');
-            var display_tool = $(this).find(".js-uploaded-file-wrap");
+            //var crop_url = $(this).find('.js-crop-popup');
+            var delete_url = $(this).find('.js-logo-remove');
             uploader = new qq.FileUploader({
                 action: data_url,
                 element: dev[0],
@@ -34,11 +34,14 @@
                 onComplete: function (id, fileName, responseJSON) {
                     if (responseJSON.success) {
                         $('.qq-upload-list').html('');
-                        display_tool.html('<img src="' + responseJSON.uri + '" class="img-responsive" style="width:100%;">');
+                        $(".js-cmpy-logo-name").val(responseJSON.full_filename); // in popup
+                        $(".js-uploaded-logo-wrap").html('<img src="' + responseJSON.uri + '" id="image" class="img-responsive" style="width:100%;">');
+                        //crop_url.attr('href', base_url + 'overlay/crop?pid=' + object_id + '&photo=' + responseJSON.full_filename);
                         delete_url.attr("data-photo", responseJSON.full_filename);
                         delete_url.attr("data-upload_id", responseJSON.upload_id);
+                        // Notifier.success('uploaded_successfully');
+                        //            image_tool.show();
                         dev.hide();
-                        image_tool.show();
                     } else {
                         // Notifier.error('allowable_formats');
                     }
@@ -59,29 +62,26 @@
 
 
     });
-
     function removeUploads(that) {
         var article_id = $(that).attr('data-article_id');
         var image = $(that).attr('data-photo');
         var upload_id = $(that).attr('data-upload_id');
-        var type_id = $(that).attr('data-type_id');
-        var pointer = $(that).parent().closest('.js-upload-block');
-        var dev = pointer.find(".js-profile-pic-uploader");
-        var image_tool = pointer.find('.js-image-tool');
-        var display_tool = pointer.find(".js-uploaded-file-wrap");
+        var type_id = $(that).attr('data-type-id');
         $.ajax({
             type: "POST",
             cache: false,
-            data: {article_id: article_id, image: image, type_id: type_id, upload_id: upload_id},
+            data: {article_id:article_id,image: image, type_id: type_id, upload_id: upload_id},
             url: base_url + 'article/remove_pic',
             dataType: "json",
             success: function (response) {
                 if (response.status == 'success') {
-                    display_tool.html('<img class="img-responsive" src="" alt="">');
-                    dev.show();
-                    $(that).attr("data-photo", '');
-                    $(that).attr("data-upload_id", '');
-                    image_tool.hide();
+                    $('.js-logo-remove').attr("data-photo", '');
+                    $('.js-logo-remove').attr("data-upload_id", '');
+                    $(".js-uploaded-logo-wrap").html('<span class="img-upload-cir">Add a Logo</span>');
+                    $('.js-image-tool ').hide();
+                    $('.fileUploader').show();
+                    $('.js-upload-name').val('');
+                    //   Notifier.success(response.msg);
                 } else {
                     //  Notifier.error(response.msg);
                 }
@@ -89,38 +89,6 @@
         });
         return false;
     }
-
-
-
-    /*
-     function removeUploads(that) {
-     var article_id = $(that).attr('data-article_id');
-     var image = $(that).attr('data-photo');
-     var upload_id = $(that).attr('data-upload_id');
-     var type_id = $(that).attr('data-type_id');
-     $.ajax({
-     type: "POST",
-     cache: false,
-     data: {article_id: article_id, image: image, type_id: type_id, upload_id: upload_id},
-     url: base_url + 'article/remove_pic',
-     dataType: "json",
-     success: function (response) {
-     if (response.status == 'success') {
-     $('.js-logo-remove').attr("data-photo", '');
-     $('.js-logo-remove').attr("data-upload_id", '');
-     $(".js-uploaded-file-wrap").html('<img class="img-responsive" src="" alt="">');
-     $('.js-image-tool ').hide();
-     $('.js-profile-pic-uploader').show();
-     $('.js-upload-name').val('');
-     //   Notifier.success(response.msg);
-     } else {
-     //  Notifier.error(response.msg);
-     }
-     }
-     });
-     return false;
-     }
-     */
 </script>
 
 
@@ -132,28 +100,27 @@
             <h3> Sajan Sudedi</h3>
         </div>
     </div>
+    <br>
+    <br>
+    <br>
     <div class="row">
         <div class="col-md-4">
-            <div class="js-upload-block">
-                <div class="js-image-tool" <?php echo ($uploads) ? '' : 'style="display: none;"' ?>>
-                    <a class="js-logo-remove fa fa-trash-o alert-danger" data-type_id="7" data-upload_id="<?php echo isset($uploads) ? $uploads->id : ''; ?>" data-article_id="<?php echo $article->id; ?>" data-photo="<?php echo isset($uploads) ? $uploads->name : ''; ?>" onclick="removeUploads(this);" title="Delete Picture"></a>
-                </div>
-                <div class="js-uploaded-file-wrap">
-                    <img class="img-responsive" src="<?= isset($uploads) ? Uri::create("upload/get_image/" . $uploads->name . "/" . $uploads->id) : '' ?>" alt="">
-                </div>
-                <?php if (isset($current_user) && $current_user->group == 100): ?>
-                    <span class="js-profile-pic-uploader" <?php echo ($uploads) ? 'style="display: none;"' : '' ?> >
-                        <input type="hidden" class="uploader-data" data-url="<?php echo Uri::create('article/upload_pic'); ?>" data-user-id="<?= $current_user->id; ?>" data-object-type="7" data-object-id="<?php echo $article->id; ?>" button-text= "Upload a Picture" multiple-val= "false" />
-                        <input type="hidden" name="logo" class="js-upload-name" value="">
-                        <span class="fileUploader text-center"> </span>
-                    </span>
-
-
-
-                <?php endif; ?>
-
-
+            <div class="js-uploaded-logo-wrap">
+                <img class="img-responsive img-rounded" src="<?= isset($uploads) ? Uri::create("upload/get_image/" . $uploads->name . "/" . $uploads->id) : '' ?>" alt="">
             </div>
+            <?php if (isset($current_user) && $current_user->group == 100): ?>
+                <span class="js-profile-pic-uploader" <?php echo ($uploads) ? 'style="display: none;"' : '' ?> >
+                    <input type="hidden" class="uploader-data" data-url="<?php echo Uri::create('article/upload_pic'); ?>" data-user-id="<?= $current_user->id; ?>" data-object-type="7" data-object-id="<?php echo $article->id; ?>" button-text= "Upload a Picture" multiple-val= "false" />
+                    <input type="hidden" name="logo" class="js-upload-name" value="">
+                    <span class="fileUploader text-center"> </span>
+                </span>
+                <div class="js-image-tool" <?php echo ($uploads) ? '' : 'style="display: none;"' ?>>
+                    <a class="js-logo-remove btn btn-danger" data-type-id="<?php echo isset($uploads) ? $uploads->type_id : ''; ?>" data-upload_id="<?php echo isset($uploads) ? $uploads->id : ''; ?>" data-article_id="<?php echo $article->id; ?>" data-photo="<?php echo isset($uploads) ? $uploads->name : ''; ?>" onclick="removeUploads(this);">Delete</a>
+                </div>
+
+
+            <?php endif; ?>
+
         </div>
         <div class="col-md-4">
             <form id="detail-form">
@@ -278,10 +245,6 @@
     .related img{
         float:left;
         margin: 0px 14px 5px 0px;
-    }
-    .js-image-tool{
-            position: absolute;
-            margin-left: 350px;
     }
 </style>
 

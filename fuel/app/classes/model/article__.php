@@ -54,7 +54,7 @@ class Model_Article extends Model {
             'cascade_save' => true,
             'cascade_delete' => true,
         ),
-        'uploads' => array(
+          'uploads' => array(
             'key_from' => 'id',
             'model_to' => 'Model_Upload',
             'key_to' => 'join_id',
@@ -66,6 +66,20 @@ class Model_Article extends Model {
                 ),
             ),
         ),
+    );
+    protected static $_many_many = array(
+        /*
+        'uploads' => array(
+            'key_from' => 'id',
+            'key_through_from' => 'article_id',
+            'table_through' => 'upload_articles',
+            'key_through_to' => 'upload_id',
+            'model_to' => 'Model_Upload',
+            'key_to' => 'id',
+            'cascade_save' => true,
+            'cascade_delete' => true,
+        ),
+        */
     );
 
     public static function validate($factory) {
@@ -149,40 +163,6 @@ class Model_Article extends Model {
         }
         //echo "<pre>"; var_dump($uploads); exit;
         return $uploads;
-    }
-
-    public static function uploadPicture() {
-        $join_id = Input::get('object_id');
-        $type = Input::get('object_type');
-        $user_id = Input::get('user_id');
-        $join_type = self::JOINTYPE_UPLOAD;
-        $uploader = new Utils_Uploader(array('jpeg', 'jpg', 'png'));
-        $path = DOCROOT . 'assets/uploads' . DS;
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-        $typeName = Model_Upload_Type::find($type)->types;
-        $pic_name = $typeName . "_" . time();
-        $original = $path . $pic_name;
-        $output = $uploader->handleUploadRename($path, $pic_name);
-        if (isset($output['success'])) {
-            $original = $path . $output['full_filename'];
-            $uploadAll = Model_Upload::forge();
-            $uploadAll->user_id = $user_id;
-            $uploadAll->type_id = $type;
-            $uploadAll->join_id = $join_id;
-            $uploadAll->join_type = $join_type;
-            $uploadAll->name = $output['full_filename'];
-            $uploadAll->original_name = $output['full_filename'];
-            $uploadAll->path = $original;
-            $uploadAll->save();
-            $output['upload_id'] = $uploadAll->id;
-            Image::load($original)->preset($typeName)->save($original);
-            $localFileName = $path . $output['full_filename'];
-            $remoteFileName = DOCROOT . 'assets/uploads/' . DS . $output['full_filename'];
-            $output['uri'] = Uri::create('upload/get_image/' . $output['full_filename'] . '/' . $output['upload_id']);
-        }
-        return $output;
     }
 
 }

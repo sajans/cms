@@ -214,7 +214,10 @@ class Controller_Article extends Controller_Base {
 
     public function action_upload_pic() {
         $article = Model_Article::find(Input::get('object_id'));
-        $output = $article->uploadPicture();
+        $output = Model_Upload::uploadPicture();
+        $upload = Model_Upload::find($output['upload_id']);
+        $article->uploads[] = $upload;
+        $article->save();
         $data['response'] = json_encode($output);
         return Response::forge(View::forge('response', $data, false));
     }
@@ -226,8 +229,15 @@ class Controller_Article extends Controller_Base {
         $type_id = Input::post('type_id');
         if ($upload_id && $type_id) {
             if ($img_name) {
-                $uploads = Model_Upload::find($upload_id);
+                $article = Model_Article::find($article_id);
+                $uploads = $article->getUploads(7, 1);
                 $uploads->removeFiles();
+                unset($article->uploads[$uploads->id]);
+                $article->save();
+                
+                
+                //$model = new Model_Upload();
+                //$output = $model->removeProfileLogo($img_name, $upload_id, $type_id);
                 $xx["msg"] = "photo_deleted_successfully";
                 $xx["status"] = "success";
             } else {

@@ -28,6 +28,7 @@
         <link rel="stylesheet" href="<?= Uri::create("assets/css/style.css") ?>" />
         <!--JS -->
         <?php
+        echo View::forge("js/variables");
         echo Asset::js(array(
             'jquery-1.11.1.min.js',
             'bootstrap.min.js',

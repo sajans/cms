@@ -49,19 +49,20 @@ foreach ($links as $i => $link) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <?php /* ?>
-                  <a class="logo-mobile" href="#"><img class="img-responsive centered" src="img/logo.png" /></a>
-                  <?php */ ?>
+                
+                  <a class="logo-mobile" href="#"><img class="img-responsive centered" src="<?= Uri::create("assets/img/logo.png") ?>" /></a>
+             
             </div>
             <div class="col-md-2">
+ 		<?php /* ?>
                 <a class="logo-desktop" href="#">
                 <h3>
                     <strong>Artricle</strong><small>Saga</small>
                 </h3>
                     </a>
-                <?php /* ?>
-                  <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" />
                   <?php */ ?>
+                  <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" style="width:153px;" />
+               
 
             </div>
             <div class="login col-md-10">
