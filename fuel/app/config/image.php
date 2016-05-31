@@ -108,7 +108,7 @@ return array(
             'quality' => 100,
             'bgcolor' => null,
             'actions' => array(
-                array('resize', 400, 400, true, true),
+                array('resize', 300, 400, true, true),
             )
         ),
     )

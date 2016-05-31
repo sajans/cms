@@ -111,10 +111,37 @@ class Model_Upload extends \Orm\Model {
                 File::delete($thumbnail_path . $this->path);
             }
         }
-        if (file_exists($this->path)) {
-            File::delete($this->path);
+        if (file_exists($this->path . $this->name)) {
+            File::delete($this->path . $this->name);
         }
         DB::query("DELETE FROM `uploads` WHERE id='" . $this->id . "'")->execute();
+    }
+
+    public function cropCoverPhoto($Croppath, $upload_id) {
+        $uploader = new Utils_Uploader(array('jpeg', 'jpg', 'png'));
+        $uploads = self::find($upload_id);
+        $oldpath = $uploads->path;
+        $oldname = $uploads->name;
+        $uploadTypeModel = Model_Upload_Type::find($uploads->type_id);
+        $typeName = $uploadTypeModel->types;
+        if (file_exists($oldpath . $oldname)) {
+            File::delete($oldpath . $oldname);
+        }
+
+        $img = $Croppath;
+        $img = str_replace('data:image/png;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+
+
+        $file = $oldpath ."crop_image_".$upload_id.".png";
+        $original = $oldpath.$oldname;
+        //$thumbnail = $path . 'min_' . $newFile;
+        $success = file_put_contents($file, $data);
+        //Image::load($file)->preset('coverimage')->save($thumbnail); //360 width
+        Image::load($file)->preset($typeName)->save($original); //1260 width
+        File::delete($file);
+        return $oldname;
     }
 
 }

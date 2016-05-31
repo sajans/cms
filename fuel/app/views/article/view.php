@@ -107,6 +107,7 @@
                 <div class="js-upload-block">
                     <?php if (isset($current_user) && $current_user->group == 100 && $admin): ?>
                         <div class="js-image-tool" <?php echo ($uploads) ? '' : 'style="display: none;"' ?>>
+                            <a class="fa fa-crop js-cms-modal-call js-crop-image" href="<?= isset($uploads->id)?Uri::create("upload/crop_init?type_id=7&article_id=".$article->id."&upload_id=".$uploads->id):"#" ; ?>"></a>
                             <a class="js-logo-remove fa fa-trash-o alert-danger" data-type_id="7" data-upload_id="<?php echo isset($uploads) ? $uploads->id : ''; ?>" data-article_id="<?php echo $article->id; ?>" data-photo="<?php echo isset($uploads) ? $uploads->name : ''; ?>" onclick="removeUploads(this);" title="Delete Picture"></a>
                         </div>
                     <?php endif; ?>

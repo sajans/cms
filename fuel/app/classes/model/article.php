@@ -174,18 +174,55 @@ class Model_Article extends Model {
             $uploadAll->join_id = $join_id;
             $uploadAll->join_type = $join_type;
             $uploadAll->name = $output['full_filename'];
-            $uploadAll->original_name = $output['full_filename'];
-            $uploadAll->path = $original;
+            $uploadAll->original_name = $output['full_filename'];#You can change this name to article name
+            $uploadAll->path = $path;
             $uploadAll->save();
             $output['upload_id'] = $uploadAll->id;
             if ($uploadTypeModel->crop == 0) { #If not set crop then preset other preset after crop
                 Image::load($original)->preset($typeName)->save($original);
+            } else {
+              //  Image::load($original)->preset('banner')->save($original); #check if height and width do not match
             }
+
+            if (filesize($original) < 102400) {
+                //Do nothing
+            } else if (filesize($original) < 524288) {
+                self::compress($original, $original, 90);
+            } elseif (filesize($original) < 1048576) { //1MB
+                self::compress($original, $original, 75);
+            } elseif (filesize($original) < 3145728) { //3MB
+                self::compress($original, $original, 60);
+            } elseif (filesize($original) < 6291456) { //6MB
+                self::compress($original, $original, 40);
+            } else {
+                self::compress($original, $original, 30);
+            }
+
+
+
             $localFileName = $path . $output['full_filename'];
             $remoteFileName = DOCROOT . 'assets/uploads/' . DS . $output['full_filename'];
             $output['uri'] = Uri::create('upload/get_image/' . $output['full_filename'] . '/' . $output['upload_id']);
         }
         return $output;
+    }
+
+    public static function compress($source, $destination, $quality) {
+
+        $info = getimagesize($source);
+
+        if ($info['mime'] == 'image/jpeg')
+            $image = imagecreatefromjpeg($source);
+
+        elseif ($info['mime'] == 'image/gif')
+            $image = imagecreatefromgif($source);
+
+        elseif ($info['mime'] == 'image/png')
+            $image = imagecreatefrompng($source);
+
+        imagejpeg($image, $destination, $quality);
+
+        return $destination;
     }
 
 }

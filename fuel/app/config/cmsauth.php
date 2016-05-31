@@ -124,7 +124,7 @@ return array(
             'Controller_Article' => array(
                 'view',
             ),
-             'Controller_Upload' => array(
+            'Controller_Upload' => array(
                 'get_image',
             ),
         ),
@@ -133,6 +133,10 @@ return array(
             'Controller_Users' => array(
                 'index',
                 'dashboard',
+            ),
+            'Controller_Upload' => array(
+                'crop_init',
+                'crop_upload',
             ),
         ),
         #Writter Part
