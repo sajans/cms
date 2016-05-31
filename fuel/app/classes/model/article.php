@@ -161,7 +161,8 @@ class Model_Article extends Model {
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
-        $typeName = Model_Upload_Type::find($type)->types;
+        $uploadTypeModel = Model_Upload_Type::find($type);
+        $typeName = $uploadTypeModel->types;
         $pic_name = $typeName . "_" . time();
         $original = $path . $pic_name;
         $output = $uploader->handleUploadRename($path, $pic_name);
@@ -177,7 +178,9 @@ class Model_Article extends Model {
             $uploadAll->path = $original;
             $uploadAll->save();
             $output['upload_id'] = $uploadAll->id;
-            Image::load($original)->preset($typeName)->save($original);
+            if ($uploadTypeModel->crop == 0) { #If not set crop then preset other preset after crop
+                Image::load($original)->preset($typeName)->save($original);
+            }
             $localFileName = $path . $output['full_filename'];
             $remoteFileName = DOCROOT . 'assets/uploads/' . DS . $output['full_filename'];
             $output['uri'] = Uri::create('upload/get_image/' . $output['full_filename'] . '/' . $output['upload_id']);

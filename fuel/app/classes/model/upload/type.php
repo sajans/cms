@@ -5,6 +5,7 @@ class Model_Upload_Type extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'types',
+		'crop',
 		'thumbnail',
 		'types_order',
 		'created_at',

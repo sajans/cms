@@ -73,6 +73,7 @@
                     </td>
                     <td>
                         <span class="fancyLink" ><?php echo Html::anchor('admin/article/edit/' . $article->id, '<span class="action"><i class="fa fa-pencil" title="Edit User"></i></span>'); ?></span>
+                        <?php echo Html::anchor('article/view/' . $article->url_title."/admin", '<span class="action"><i class="fa fa-eye" title="View Article"></i></span>',array('target'=>"_blank")); ?>
                         <?php if ($article->deleted == 0) { ?>
                             <?php echo Html::anchor('admin/article/delete/' . $article->id, '<span class="action red"><i class="fa fa-trash-o"></i></span>', array('title' => 'Delete Article', 'class' => 'js-cms-modal-call')); ?>
                         <?php } else { ?>

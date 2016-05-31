@@ -109,7 +109,7 @@ $(document).ready(function () {
      *https://goodies.pixabay.com/jquery/tag-editor/demo.html*
      *****************/
     $('textarea#form_keywords').tagEditor();
-    
+
 
 
     /*****************
@@ -178,5 +178,30 @@ $(document).ready(function () {
      *******************************************/
 
 
+    /********************************
+     *** textarea-with-auto-resize*** 
+     ********************************/
+/*
+    function h(e) {
+        $(e).css({'height': 'auto', 'overflow-y': 'hidden'}).height(e.scrollHeight);
+    }
+    $('textarea').each(function () {
+        h(this);
+    }).on('input', function () {
+        h(this);
+    });
+    
+
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+*/
+
+    /********************************
+     *** textarea-with-auto-resize*** 
+     ********************************/
 
 });

@@ -40,7 +40,7 @@ foreach ($links as $i => $link) {
 
 <div class="header">
     <div class="container">
-        <nav class="navbar navbar-default" role="navigation">
+        <nav class="navbar navbar-default navbar-inverse" role="navigation" data-spy="affix" data-offset-top="197">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -54,15 +54,16 @@ foreach ($links as $i => $link) {
              
             </div>
             <div class="col-md-2">
- 		<?php /* ?>
+ 		<?php  ?>
                 <a class="logo-desktop" href="#">
-                <h3>
+                <large class="logo-text">
                     <strong>Artricle</strong><small>Saga</small>
-                </h3>
+                </large>
                     </a>
-                  <?php */ ?>
+                  <?php  ?>
+                <?php /* ?>
                   <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" style="width:153px;" />
-               
+               <?php */ ?>
 
             </div>
             <div class="login col-md-10">

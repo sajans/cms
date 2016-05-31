@@ -6,13 +6,12 @@ class Controller_Article extends Controller_Base {
         parent::before();
     }
 
-    public function action_view($id = null) {
-
-
+    public function action_view($id = null,$admin=null) {
         $article = Model_Article::find_by_url_title($id);
         if ($article) {
             $view = Presenter::forge('article/view');
             $view->set('article', $article);
+            $view->set('admin', $admin);
             $this->template->set('content', $view);
         } else {
             return Response::forge(Presenter::forge('welcome/404'), 404);
