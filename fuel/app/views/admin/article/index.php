@@ -40,19 +40,19 @@
             <td>
                 <div class="input email">
                     <?php echo Form::label('Status', 'status'); ?>
-                    <?php echo Form::select('status', '', array('A' => 'Active', 'R' => 'Reviewed', 'D' => 'Disabled'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                    <?php echo Form::select('status', '', array(''=>'All','A' => 'Active', 'R' => 'Reviewed', 'D' => 'Disabled'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
                 </div>
             </td>
             <td>
                 <div class="input email">
                     <?php echo Form::label('Deleted', 'deleted'); ?>
-                    <?php echo Form::select('deleted', '', array('0' => 'Active', '1' => 'Deleted'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                    <?php echo Form::select('deleted', '', array(''=>'All','0' => 'Active', '1' => 'Deleted'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
                 </div>
             </td>
             <td>
                 <div class="input email">
                     <?php echo Form::label('Completion', 'completion'); ?>
-                    <?php echo Form::select('completion', '', array('C' => 'Complete', 'NC' => 'Not Complete'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
+                    <?php echo Form::select('completion', '', array(''=>'All','C' => 'Complete', 'NC' => 'Not Complete'), array('class' => '', 'onchange' => 'filterArticle()')); ?>
                 </div>
             </td>
 

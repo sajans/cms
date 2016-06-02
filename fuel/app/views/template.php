@@ -50,6 +50,7 @@
             <?= View::forge("templates/sections/navigation", $navigation); ?>
         <?php } ?>
         <!-- Navigation-->
+        <div class="clearfix"></div>
         <div id="cms-page">
             <div class="alert-section">
                 <?php if (Session::get_flash('success')): ?>

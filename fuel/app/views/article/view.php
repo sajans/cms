@@ -34,10 +34,11 @@
                 onComplete: function (id, fileName, responseJSON) {
                     if (responseJSON.success) {
                         $('.qq-upload-list').html('');
-                        display_tool.html('<img src="' + responseJSON.uri + '" class="img-responsive" style="width:100%;">');
+                        display_tool.html('<img src="' + responseJSON.uri + '" class="img-responsive" style="width:100%;" id="upload_img_' + responseJSON.upload_id + '">');
                         delete_url.attr("data-photo", responseJSON.full_filename);
                         delete_url.attr("data-upload_id", responseJSON.upload_id);
                         dev.hide();
+                        image_tool.find(".js-crop-image").attr("href", base_url + "upload/crop_init?upload_id=" + responseJSON.upload_id + "&type_id=" + object_type + "&article_id=" + object_id);
                         image_tool.show();
                     } else {
                         // Notifier.error('allowable_formats');
@@ -45,10 +46,10 @@
                 },
                 onProgress: function (id, fileName, loaded, total) {
                     var percent = (loaded / total) * 100;
-                    //console.log(percent);
+                    Notifier.success(percent + " Complete...");
                 },
                 onUpload: function (id, fileName) {
-                    // Notifier.notify('uploading');
+                    //Notifier.notify('uploading');
                 },
                 showMessage: function (message) {
                     // Notifier.error(message);
@@ -96,24 +97,29 @@
 <!-- Page Content -->
 <div class="container">
     <!-- Heading Row -->
-    <div class="row">
-        <div class="center">
-            <h3> Sajan Sudedi</h3>
+    <div class="article-heading">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center">
+                    <h3><strong> Sajan Sudedi</strong></h3>
+                </div>
+            </div>
         </div>
     </div>
+    <hr>
     <div class="row">
         <div class="col-md-4">
-            <div class="article-info-block same-row-info">
+            <div class="article-image-block">
                 <div class="js-upload-block">
                     <?php if (isset($current_user) && $current_user->group == 100 && $admin): ?>
                         <div class="js-image-tool" <?php echo ($uploads) ? '' : 'style="display: none;"' ?>>
-                            <a class="fa fa-crop js-cms-modal-call js-crop-image" href="<?= isset($uploads->id)?Uri::create("upload/crop_init?type_id=7&article_id=".$article->id."&upload_id=".$uploads->id):"#" ; ?>"></a>
+                            <a class="fa fa-crop js-cms-modal-call js-crop-image" href="<?= isset($uploads->id) ? Uri::create("upload/crop_init?type_id=7&article_id=" . $article->id . "&upload_id=" . $uploads->id) : "#"; ?>"></a>
                             <a class="js-logo-remove fa fa-trash-o alert-danger" data-type_id="7" data-upload_id="<?php echo isset($uploads) ? $uploads->id : ''; ?>" data-article_id="<?php echo $article->id; ?>" data-photo="<?php echo isset($uploads) ? $uploads->name : ''; ?>" onclick="removeUploads(this);" title="Delete Picture"></a>
                         </div>
                     <?php endif; ?>
 
                     <div class="js-uploaded-file-wrap">
-                        <img class="img-responsive" src="<?= isset($uploads) ? Uri::create("upload/get_image/" . $uploads->name . "/" . $uploads->id) : '' ?>" alt="">
+                        <img class="img-responsive" src="<?= isset($uploads) ? Uri::create("upload/get_image/" . $uploads->name . "/" . $uploads->id) : '' ?>" alt="" id="<?= isset($uploads) ? "upload_img_" . $uploads->id : "" ?>">
                     </div>
                     <?php if (isset($current_user) && $current_user->group == 100 && $admin): ?>
 
@@ -198,6 +204,7 @@
 
     <!-- /.row -->
     <br>
+    <br>
     <!-- Content -->
     <div class="row">
         <div class="col-lg-12">
@@ -219,7 +226,9 @@
 
     <!-- People Also Like -->
     <div class="related">
-        <h3>You may like</h3>
+        <hr>
+        <h3 class="text-center"><strong>You may like</strong></h3>
+        <hr>
         <div class="row">
             <div class="col-md-4">
                 <div class="same-row-display article-info-block">
@@ -237,7 +246,7 @@
                     <h4 class="text-center">Heading 2</h4>
                     <img class="img-responsive img-rounded" src="http://placehold.it/100x100" alt="">
                     <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
-                    <div class="btn-group text-center">
+                    <div class="btn-group center-block">
                         <a class="btn btn-default" href="#">More Info</a>
                     </div>
                 </div>
@@ -265,32 +274,9 @@
 <br>
 <!-- /.container -->
 <style>
-    .related img{
-        float:left;
-        margin: 0px 14px 5px 0px;
-    }
-    .js-image-tool{
-        position: absolute;
-        margin-left: 290px;
-    }
-    //#cms-page{background-color: #80C2D0;}
-    .header{    background: #80C24C; height: 70px;}
-    //.article-info-block{background: #80C2A2; padding:15px;border-radius: 15px;}
-    .article-info-block{background: #EEE; padding:15px;border-radius: 15px;}
-    .same-row-info{min-height: 360px;}
-    .logo-text{font-size:24px;}
-    small{font-size: 12px;color:red;font-style: italic}
-    .js-uploaded-file-wrap {width: 328px; height: 328px;}
-    .js-uploaded-file-wrap img{border-radius: 15px;}
-    .description-block{min-height:400px;}
-    .qq-uploader {
-        position: relative;
-        margin-top: -192px;
-        width:100%;
-    }
-    .same-row-display{min-height: 200px;}
-    .footer{background: #80C24C;}
 
+    //#cms-page{background-color: #80C2D0;}
+    //.article-info-block{background: #80C2A2; padding:15px;border-radius: 15px;}
 </style>
 
 

@@ -24,8 +24,8 @@ class Controller_Upload extends Controller_Base {
 
     public function action_crop_init() {
         $data['upload_id'] = Input::get('upload_id');
-        $data['article_id'] = Input::get('article_id');
-        $data['type_id'] = Input::get('type_id');
+       // $data['article_id'] = Input::get('article_id');
+       // $data['type_id'] = Input::get('type_id');
         $data["uploads"] = Model_Upload::find(Input::get('upload_id'));
         $this->template = View::forge('uploads/crop', $data, false);
     }
