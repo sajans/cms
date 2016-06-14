@@ -81,11 +81,15 @@ foreach ($links as $i => $link) {
                 <div class="col-md-2">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        </button>                            <a class="logo-desktop" href="#">
+                        </button> 
+<img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" style="width:153px;" />
+<?php /* 'MuseoSans_xFat' ?>                           
+                        <a class="logo-desktop" href="<?= Uri::create('/');?>">
                             <large class="logo-text">
                                 <strong>Artricle</strong><small>Saga</small>
                             </large>
                         </a>
+<?php */?>
                     </div>
                 </div>
 

@@ -58,9 +58,9 @@ return array(
     'links' => array(
         'public_navigation' => array(
             'home' => 'Home',
-            'person' => 'Person',
-            'place' => 'Place',
-            'festival' => 'Festival',
+            'about-us' => 'About Us',
+            'contact-us' => 'Contact Us',
+            'help' => 'Help',
             /*
             'dropdown1' => array(
                 'text' => 'More', //'More dropdown',

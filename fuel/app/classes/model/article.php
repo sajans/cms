@@ -174,14 +174,14 @@ class Model_Article extends Model {
             $uploadAll->join_id = $join_id;
             $uploadAll->join_type = $join_type;
             $uploadAll->name = $output['full_filename'];
-            $uploadAll->original_name = $output['full_filename'];#You can change this name to article name
+            $uploadAll->original_name = $output['full_filename']; #You can change this name to article name
             $uploadAll->path = $path;
             $uploadAll->save();
             $output['upload_id'] = $uploadAll->id;
             if ($uploadTypeModel->crop == 0) { #If not set crop then preset other preset after crop
                 Image::load($original)->preset($typeName)->save($original);
             } else {
-              //  Image::load($original)->preset('banner')->save($original); #check if height and width do not match
+                //  Image::load($original)->preset('banner')->save($original); #check if height and width do not match
             }
 
             if (filesize($original) < 102400) {
@@ -223,6 +223,23 @@ class Model_Article extends Model {
         imagejpeg($image, $destination, $quality);
 
         return $destination;
+    }
+
+    public static function searchByDate($date) {
+
+        $results = DB::query("select * from articles where 1")->as_object()->execute()->as_array();
+        return $results;
+    }
+
+    public static function searchByText($text) {
+
+        $results = DB::query("select * from articles where 1")->as_object()->execute()->as_array();
+        return $results;
+    }
+        public static function getRelatedArticle($text=null) {
+
+        $results = DB::query("select * from articles where 1")->as_object()->execute()->as_array();
+        return $results;
     }
 
 }

@@ -230,13 +230,15 @@
         <h3 class="text-center"><strong>You may like</strong></h3>
         <hr>
         <div class="row">
+            <?= View::forge("article/3_block",array('articles'=>$related),false);?>
+            <?php /* ?>
             <div class="col-md-4">
                 <div class="same-row-display article-info-block">
                     <h4 class="text-center">Heading 1</h4>
                     <img class="img-responsive img-rounded" src="http://placehold.it/100x100" alt="">
                     <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
-                    <div class="btn-group text-center">
-                        <a class="btn btn-default" href="#">More Info</a>
+                    <div class="text-center">
+                        <a class="btn btn-primary" href="#">More Info</a>
                     </div>
                 </div>
             </div>
@@ -246,8 +248,8 @@
                     <h4 class="text-center">Heading 2</h4>
                     <img class="img-responsive img-rounded" src="http://placehold.it/100x100" alt="">
                     <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
-                    <div class="btn-group center-block">
-                        <a class="btn btn-default" href="#">More Info</a>
+                    <div class="text-center">
+                        <a class="btn btn-primary" href="#">More Info</a>
                     </div>
                 </div>
             </div>
@@ -257,12 +259,14 @@
                     <h4 class="text-center">Heading 3</h4>
                     <img class="img-responsive img-rounded" src="http://placehold.it/100x100" alt="">
                     <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe rem nisi accusamus error velit animi non ipsa placeat. Recusandae, suscipit, soluta quibusdam accusamus a veniam quaerat eveniet eligendi dolor consectetur.</p>
-                    <div class="btn-group text-center">
-                        <a class="btn btn-default" href="#">More Info</a>
+                    <div class="text-center">
+                        <a class="btn btn-primary" href="#">More Info</a>
                     </div>
                 </div>
             </div>
             <!-- /.col-md-4 -->
+            
+            <?php */ ?>
         </div>
         <!-- /.row -->
 

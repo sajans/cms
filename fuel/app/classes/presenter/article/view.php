@@ -19,6 +19,7 @@ class Presenter_Article_View extends Presenter {
         $this->admin = $this->admin;
         $this->fields = Model_Article_Detail::getFields();
         $this->uploads = $this->article->getUploads(7, 1);
+        $this->related = Model_Article::getRelatedArticle();
     }
 
 }

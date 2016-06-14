@@ -6,7 +6,7 @@ class Controller_Article extends Controller_Base {
         parent::before();
     }
 
-    public function action_view($id = null,$admin=null) {
+    public function action_view($id = null, $admin = null) {
         $article = Model_Article::find_by_url_title($id);
         if ($article) {
             $view = Presenter::forge('article/view');
@@ -240,6 +240,24 @@ class Controller_Article extends Controller_Base {
             $data['response'] = json_encode($xx);
         }
         return Response::forge(View::forge('response', $data, false));
+    }
+
+    public function action_search() {
+        
+        
+        $searchType=Input::post("search_type");
+        $searchField=Input::post("search_field");
+        if($searchType=='date'){
+          $results = Model_Article::searchByDate($searchField);  
+        }else{
+           $results = Model_Article::searchByText($searchField);    
+        }
+        
+        $view = View::forge("article/3_blocks", array('articles'=>$results), false)->render();
+        $data['html'] = $view;
+        $data['status'] = "success";
+        $data1['response'] = json_encode($data);
+        $this->template = View::forge('response', $data1, false);
     }
 
 }

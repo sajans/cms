@@ -123,6 +123,7 @@ return array(
             ),
             'Controller_Article' => array(
                 'view',
+                'search',
             ),
             'Controller_Upload' => array(
                 'get_image',
