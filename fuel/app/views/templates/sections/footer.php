@@ -3,9 +3,12 @@
         <div class="container">
             <div class="logo-footer text-center">
                 <a class="logo-desktop text-center" href="<?= Uri::create('/'); ?>">
+                    <img class="logo-desktop" src="<?= Uri::create("assets/img/logo.png") ?>" style="width:153px;" />
+                    <?php /* ?>
                     <large class="logo-text">
                         <strong>Artricle</strong><small>Saga</small>
                     </large>
+                    <?php */ ?>
                 </a>
             </div>
 

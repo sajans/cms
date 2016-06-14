@@ -253,7 +253,7 @@ class Controller_Article extends Controller_Base {
            $results = Model_Article::searchByText($searchField);    
         }
         
-        $view = View::forge("article/3_blocks", array('articles'=>$results), false)->render();
+        $view = View::forge("article/3_block", array('articles'=>$results), false)->render();
         $data['html'] = $view;
         $data['status'] = "success";
         $data1['response'] = json_encode($data);

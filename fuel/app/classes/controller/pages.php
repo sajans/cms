@@ -15,11 +15,14 @@ class Controller_Pages extends Controller_Base {
         } elseif ($type == 'festival') {
             $this->template->title = 'Festival';
             $this->template->content = 'Festival Page';
-        } else {
+        } elseif ($type == 'home') {
             $this->template->title = 'Home';
-            $this->template->content = View::forge("pages/home");;
+            $this->template->content = View::forge("pages/home");
+        } else {
+            $this->template->title = $type;
+            $this->template->content = "<br><br><br><br>" . $type . "<br><br><br><br>";
         }
-        $this->template->navClass ='active';
+        $this->template->navClass = 'active';
     }
 
 }
